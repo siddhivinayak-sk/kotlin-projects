@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/semantic.min.css" />
+    <script type="text/javascript" src="/static/app.js"></script>
+    <style>
+        #logging {
+            background: #dddddd;
+            position: absolute;
+            top: 50%;
+            left: 0.1%;
+            height: 48%;
+            width: 99%;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body style="margin: 20px">
+<div>
+    <div id="connect-container" class="ui centered grid">
+        <div class="row">
+            <button id="connect" onclick="connect();" class="ui green button ">Connect</button>
+            <button id="disconnect" disabled="disabled" onclick="disconnect();"
+                    class="ui red button">Disconnect</button>
+        </div>
+        <div class="row">
+        <textarea id="message" style="width: 350px" class="ui input"
+                  placeholder="Message to Echo"></textarea>
+        </div>
+        <div class="row">
+            <button id="echo" onclick="echo();" disabled="disabled" class="ui button">Echo message</button>
+            <button id="clear" onclick="clearElements();" disabled="disabled" class="ui button">Clear</button>
+        </div>
+        <div class="row">
+            <lable>Run &nbsp;</lable>
+            <input id="inpRun" type="text" class="ui text" value="0"/>&nbsp;&nbsp;&nbsp;
+
+            <lable>Wide &nbsp;</lable>
+            <input id="inpWide" type="checkbox"/>&nbsp;&nbsp;&nbsp;
+
+            <lable>No Ball &nbsp;</lable>
+            <input id="inpNoBall" type="checkbox"/>&nbsp;&nbsp;&nbsp;
+
+            <lable>Wicket &nbsp;</lable>
+            <input id="inpWicket" type="checkbox"/>&nbsp;&nbsp;&nbsp;
+
+            <button id="ballDetails" onclick="ballDetails();" class="ui button">Ball Details</button>
+        </div>
+    </div>
+    <div id="console-container">
+        <h3>Cricket Score</h3>
+        <div id="logging"></div>
+    </div>
+</div>
+</body>
+</html>

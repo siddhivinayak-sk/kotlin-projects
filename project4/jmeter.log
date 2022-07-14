@@ -1,0 +1,22 @@
+2022-06-07 10:09:51,994 INFO o.a.j.u.JMeterUtils: Setting Locale to en_EN
+2022-06-07 10:09:52,029 INFO o.a.j.JMeter: Loading user properties from: C:\sandeep\sandbox\apache-jmeter-5.4.3\bin\user.properties
+2022-06-07 10:09:52,031 INFO o.a.j.JMeter: Loading system properties from: C:\sandeep\sandbox\apache-jmeter-5.4.3\bin\system.properties
+2022-06-07 10:09:52,037 INFO o.a.j.JMeter: Copyright (c) 1998-2021 The Apache Software Foundation
+2022-06-07 10:09:52,038 INFO o.a.j.JMeter: Version 5.4.3
+2022-06-07 10:09:52,038 INFO o.a.j.JMeter: java.version=11.0.15
+2022-06-07 10:09:52,038 INFO o.a.j.JMeter: java.vm.name=Java HotSpot(TM) 64-Bit Server VM
+2022-06-07 10:09:52,038 INFO o.a.j.JMeter: os.name=Windows 10
+2022-06-07 10:09:52,038 INFO o.a.j.JMeter: os.arch=amd64
+2022-06-07 10:09:52,041 INFO o.a.j.JMeter: os.version=10.0
+2022-06-07 10:09:52,041 INFO o.a.j.JMeter: file.encoding=Cp1252
+2022-06-07 10:09:52,041 INFO o.a.j.JMeter: java.awt.headless=null
+2022-06-07 10:09:52,041 INFO o.a.j.JMeter: Max memory     =1073741824
+2022-06-07 10:09:52,041 INFO o.a.j.JMeter: Available Processors =8
+2022-06-07 10:09:52,048 INFO o.a.j.JMeter: Default Locale=English (EN)
+2022-06-07 10:09:52,048 INFO o.a.j.JMeter: JMeter  Locale=English (EN)
+2022-06-07 10:09:52,048 INFO o.a.j.JMeter: JMeterHome=C:\sandeep\sandbox\apache-jmeter-5.4.3
+2022-06-07 10:09:52,048 INFO o.a.j.JMeter: user.dir  =C:\sandeep\code\trials\kotpro\project4
+2022-06-07 10:09:52,049 INFO o.a.j.JMeter: PWD       =C:\sandeep\code\trials\kotpro\project4
+2022-06-07 10:09:52,050 INFO o.a.j.JMeter: IP: 192.168.211.119 Name: ITEM-S119250 FullName: ITEM-S119250.emea.msad.sopra
+2022-06-07 10:09:52,216 INFO o.a.j.JMeter: Setting LAF to: com.github.weisj.darklaf.DarkLaf:com.github.weisj.darklaf.theme.DarculaTheme
+2022-06-07 10:09:53,301 INFO o.a.j.JMeter: Loaded icon properties from org/apache/jmeter/images/icon.properties
