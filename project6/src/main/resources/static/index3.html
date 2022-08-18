@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<body>
+<div class="result"></div>
+<script>
+    if(typeof(EventSource) !== "undefined") {
+
+           var source = new EventSource('/box/listen');
+
+           source.onopen = function(){
+             console.log('Connection is opened.'+source.readyState);
+           };
+
+           source.onerror = function(){
+               console.log('Error: '+source.readyState);
+           };
+
+           source.onmessage = function(e){
+                console.log("OnMessage:")
+                console.log(e)
+           };
+
+          source.addEventListener("notice", function(e) {
+            console.log("Notice:")
+            console.log(e)
+          });
+
+          source.addEventListener("update", function(e) {
+            console.log("Update:")
+            console.log(e)
+          });
+
+          source.addEventListener("message", function(e) {
+            console.log("Massage:")
+            console.log(e)
+          });
+
+    } else {
+            document.getElementById("result").innerHTML = "Sorry, your browser does not support server-sent events...";
+    }
+
+</script>
+</body>
+</html>
