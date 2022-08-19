@@ -1,0 +1,171 @@
+server:
+  port: 9090
+spring:
+  cloud:
+    gateway:
+      filter:
+        secure-headers:
+          strict-transport-security: "max-age: 31536000; includeSubDomains; preload"
+          content-security-policy: default-src 'self';
+
+#      default-filters:
+#        - AddResponseHeader=Cache-Control, no-cache, no-store, max-age=0, must-revalidate
+#        - AddResponseHeader=Feature-Policy, accelerometer 'none';
+#          ambient-light-sensor 'none';
+#          camera 'none';
+#          encrypted-media 'none';
+#          fullscreen 'none';
+#          geolocation 'self';
+#          gyroscope 'none';
+#          magnetometer 'none';
+#          microphone 'none';
+#          midi 'none';
+#          payment 'none';
+#          speaker 'none';
+#          sync-xhr 'none';
+#          usb 'none';
+#          vr 'none';
+#          picture-in-picture 'none';
+#          document-write 'none';
+#          image-compression 'none';
+#          legacy-image-formats 'none';
+#          max-downscaling-image 'none';
+#          unsized-media 'none';
+#          vertical-scroll 'none';
+#          animations 'none';
+#          autoplay 'none'
+#        - AddResponseHeader=Pragma, no-cache
+#        - AddResponseHeader=Expires, 0
+
+      actuator:
+        verbose:
+          enabled: false
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - PATCH
+              - OPTIONS
+      set-status:
+        original-status-header-name: original-http-status
+      httpclient:
+        #connect-timeout: 1000
+        #response-timeout: 5s
+        ssl:
+          useInsecureTrustManager: true
+          #handshake-timeout-millis: 10000
+          #close-notify-flush-timeout-millis: 3000
+          #close-notify-read-timeout-millis: 0
+          #trustedX509Certificates:
+          #  - cert1.pem
+          #  - cert2.pem
+      routes:
+        - id: after_route
+          uri: https://httpbin.org
+          #secure-headers:
+          #  disable: x-frame-options,strict-transport-security
+          predicates:
+            - Path=/red/{segment},/red/{segment}/**
+            #- Path=/red/{segment},/blue/{segment}
+            #- Cookie=mycookie,mycookievalue
+            #- After=2017-01-20T17:42:47.789-07:00[America/Denver]
+            #- Before=2017-01-20T17:42:47.789-07:00[America/Denver]
+            #- Between=2017-01-20T17:42:47.789-07:00[America/Denver], 2017-01-21T17:42:47.789-07:00[America/Denver]
+            #- Header=X-Request-Id, \d+
+            #- Host=**.somehost.org,**.anotherhost.org
+            #- Method=GET,POST
+            #- Query=red, gree.
+            #- RemoteAddr=192.168.1.1/24
+            #- Weight=group1, 2
+          filters:
+            - AddRequestHeader=X-Request-Red, blue
+            - AddRequestHeader=Header1, header1value
+            - AddRequestHeader=Host, www.google.com
+            - AddRequestHeader=X-Request-Xred, Blue-{segment}
+            - AddRequestParameter=red, blue
+            - AddRequestParameter=foo, bar-{segment}
+            - AddResponseHeader=X-Response-Mred, Green
+            - AddResponseHeader=foox, bar-{segment}
+            - AddResponseHeader=X-Response-RedPwd, password=abc
+            #- DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+            - name: CircuitBreaker
+              args:
+                name: myCircuitBreaker
+                fallbackUri: forward:/fallback
+            - MapRequestHeader=Header1, X-Request-Header1
+            #- RedirectTo=302, https://httpbin.org
+            #- PrefixPath=/mypath #Add prefix in path
+            #- PreserveHostHeader #Preserve original header instead of HTTP Client Header
+            #- name: RequestRateLimiter
+            #  args:
+            #    redis-rate-limiter.replenishRate: 10
+            #    redis-rate-limiter.burstCapacity: 20
+            #    redis-rate-limiter.requestedTokens: 1
+            - RemoveRequestHeader=X-Request-Foo
+            - RemoveResponseHeader=X-Response-Foo
+            - RemoveRequestParameter=red
+            - RewritePath=/red(?<segment>/?.*), $\{segment}
+            #- RewriteLocationResponseHeader=AS_IN_REQUEST, Location, ,           #Change the location headers of downstream service
+            - RewriteResponseHeader=X-Response-RedPwd, , password=[^&]+, password=***
+            #- SaveSession
+            #- SetPath=/{segment}
+            - SetRequestHeader=X-Request-Red, Blue
+            - SetRequestHeader=foo, bar-{segment}
+            - SetResponseHeader=X-Response-Red, Blue
+            - SetResponseHeader=foo, bar-{segment}
+            #- SetStatus=401
+            #- StripPrefix=2    #It strips/removes number of paths (separated by /) before routing to service e.g. /abc/def/test -> /test
+            #- name: Retry
+            #  args:
+            #    retries: 3
+            #    statuses: NOT_FOUND
+            #    methods: GET,POST
+            #    backoff:
+            #      firstBackoff: 10ms
+            #      maxBackoff: 50ms
+            #      factor: 2
+            #      basedOnPreviousValue: false
+            - name: RequestSize
+              args:
+                maxSize: 5000000
+            #- name: SetRequestHost
+            #  args:
+            #    host: example.org
+
+        - id: event_stream_test
+          uri: http://localhost:8080
+          predicates:
+            - Path=/sse/{segment}/**
+          filters:
+#            - AddRequestHeader=X-Request-Red, blue
+#            - AddResponseHeader=X-Response-Mred, Green
+            - RewritePath=/sse(?<segment>/?.*), $\{segment}
+#            - RewriteResponseHeader=X-Response-RedPwd, , password=[^&]+, password=***
+
+        - id: ingredients-fallback
+          uri: http://localhost:8080
+          predicates:
+          - Path=/fallback
+
+
+#server:
+#  ssl:
+#    enabled: true
+#    key-alias: scg
+#    key-store-password: scg1234
+#    key-store: classpath:scg-keystore.p12
+#    key-store-type: PKCS12
+
+
+management:
+  endpoint:
+    gateway:
+      enabled:true
+  endpoints:
+    web:
+      exposure:
+        include: gateway
