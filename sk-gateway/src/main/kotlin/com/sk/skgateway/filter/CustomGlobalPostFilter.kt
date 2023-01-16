@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component
 import org.springframework.web.server.ServerWebExchange
 import reactor.core.publisher.Mono
 
-@Component
+//@Component
 class CustomGlobalPostFilter: GlobalFilter, Ordered {
     override fun filter(exchange: ServerWebExchange, chain: GatewayFilterChain?): Mono<Void>? {
         return chain?.filter(exchange)

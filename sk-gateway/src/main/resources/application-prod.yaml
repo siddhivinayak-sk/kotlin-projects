@@ -102,8 +102,8 @@ spring:
             #- PreserveHostHeader #Preserve original header instead of HTTP Client Header
             #- name: RequestRateLimiter
             #  args:
-            #    redis-rate-limiter.replenishRate: 10
-            #    redis-rate-limiter.burstCapacity: 20
+            #    redis-rate-limiter.replenishRate: 1
+            #    redis-rate-limiter.burstCapacity: 2
             #    redis-rate-limiter.requestedTokens: 1
             - RemoveRequestHeader=X-Request-Foo
             - RemoveResponseHeader=X-Response-Foo
