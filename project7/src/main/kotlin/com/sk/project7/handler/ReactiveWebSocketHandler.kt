@@ -14,6 +14,7 @@ import com.sk.project7.util.ScoreManager
 import io.swagger.v3.core.util.Json
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
+import org.springframework.web.reactive.socket.WebSocketMessage
 import reactor.core.publisher.FluxSink
 import reactor.core.publisher.SynchronousSink
 import java.time.Instant
@@ -44,7 +45,8 @@ class ReactiveWebSocketHandler: WebSocketHandler {
         })
     }
 
-    val scoreFluxWithTime: Flux<String> = Flux.interval(Duration.ofMillis(1000L)).map { scoreManager.currentScore().toData() }
+    val scoreFluxWithTime: Flux<String> = Flux.interval(Duration.ofMillis(1000L))
+        .map { scoreManager.currentScore().toData() }
 
     override fun handle(session: WebSocketSession): Mono<Void> {
         return session.send(
@@ -54,7 +56,7 @@ class ReactiveWebSocketHandler: WebSocketHandler {
                 .map(session::textMessage))
 
             .and(session.receive().map{ msg ->
-                msg.payloadAsText
+                msg.process()
             }.log())
     }
 
@@ -75,5 +77,9 @@ class ReactiveWebSocketHandler: WebSocketHandler {
             ""
         }
         return str
+    }
+
+    private fun WebSocketMessage.process(): String {
+        return payloadAsText
     }
 }
