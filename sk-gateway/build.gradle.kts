@@ -49,3 +49,22 @@ tasks.withType<KotlinCompile> {
 tasks.withType<Test> {
 	useJUnitPlatform()
 }
+
+tasks.register<DocumentTask>("create-readme") {
+    val documents = listOf<String>("introduction", "details")
+    sourceDocuments.set(documents)
+}
+
+open class DocumentTask @Inject constructor(objectFactory: ObjectFactory) : DefaultTask() {
+    @get:Input val sourceDocuments: ListProperty<String> = objectFactory.listProperty(String::class.java)
+
+    @TaskAction
+    fun readmeMerge() {
+        val readme = File("README.md")
+        readme.deleteOnExit()
+        readme.createNewFile()
+        for(fileName in sourceDocuments.get()) {
+            readme.appendText(File("${project.projectDir}/documents/$fileName.md").readText())
+        }
+    }
+}
