@@ -24,6 +24,20 @@ spring:
               redis-rate-limiter.burstCapacity: 60
               redis-rate-limiter.requestedTokens: 60
               key-resolver: "#{@keyResolver2}"
+        - id: websocket-test-endpoint
+          uri: http://localhost:8080
+          predicates:
+            - Path=/websocket-test-endpoint/api/**
+            - QueryParam=Authorization
+          filters:
+            - RewritePath=/websocket-test-endpoint/api/(?<segment>.*), /websocket-test-endpoint/api/$\{segment}
+            - AddRequestHeader=Authorization, {Authorization}
+        - id: websocket-test
+          uri: http://localhost:8080
+          predicates:
+            - Path=/websocket-test/resources/**
+          filters:
+            - RewritePath=/websocket-test/resources/(?<segment>.*), /websocket-test/resources/$\{segment}
 
 management:
   health:
