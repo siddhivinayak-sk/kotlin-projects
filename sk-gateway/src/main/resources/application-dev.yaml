@@ -1,3 +1,5 @@
+spring.cloud.gateway.default-filters[1]: AddResponseHeader=my-custom-header-0, my-custom-header-0-value
+
 server:
   port: 9090
 spring:
@@ -5,18 +7,20 @@ spring:
     name: gateway
   cloud:
     gateway:
+#      default-filters:
+#        - AddResponseHeader=my-custom-header-1, my-custom-header-1-value
       routes:
         - id: after_route
-          uri: https://httpbin.org
+          uri: http://localhost:81
           predicates:
-            - Path=/get
+            - Path=/after_route
           filters:
           #- StripPrefix=1
           - name: RequestRateLimiter
             args:
               redis-rate-limiter.replenishRate: 1
-              redis-rate-limiter.burstCapacity: 60
-              redis-rate-limiter.requestedTokens: 60
+              redis-rate-limiter.burstCapacity: 4
+              redis-rate-limiter.requestedTokens: 4
               key-resolver: "#{@keyResolver1}"
           - name: RequestRateLimiter
             args:
@@ -38,6 +42,28 @@ spring:
             - Path=/websocket-test/resources/**
           filters:
             - RewritePath=/websocket-test/resources/(?<segment>.*), /websocket-test/resources/$\{segment}
+        - id: priority_test_regex
+          uri: http://localhost:80
+          order: 1
+          predicates:
+            - Path=/route/**
+          filters:
+            - RewritePath=/route/(?<segment>.*), /$\{segment}
+        - id: priority_test_simple
+          uri: http://localhost:80
+          order: 0
+          predicates:
+            - Path=/route/simple
+          filters:
+            - RewritePath=/route/simple, /get?name=simple
+        - id: ms_graph
+          uri: https://graph.microsoft.com
+          order: 0
+          predicates:
+            - Path=/graph/**
+          filters:
+            - RewritePath=/graph/(?<segment>.*), /v1.0/$\{segment}
+
 
 management:
   health:

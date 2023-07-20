@@ -1,0 +1,1 @@
+spring.cloud.gateway.default-filters[0]: AddResponseHeader=my-custom-header-1, my-custom-header-1-value
