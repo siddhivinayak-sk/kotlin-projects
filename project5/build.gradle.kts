@@ -21,6 +21,10 @@ repositories {
 
 dependencies {
     implementation("io.projectreactor:reactor-core:3.4.19")
+    implementation("com.nimbusds:nimbus-jose-jwt:9.25.6")
+    implementation("org.yaml:snakeyaml:2.0")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.15.2")
+
     testImplementation("io.projectreactor:reactor-test:3.4.19")
     testImplementation(kotlin("test"))
     testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
