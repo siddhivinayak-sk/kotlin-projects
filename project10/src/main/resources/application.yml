@@ -1,0 +1,23 @@
+k6:
+  json:
+    input:
+      path: C:\sandeep\code\amigos\abam\abam-bundles\k6-abam-bundle\raw_results\2023-1-validate-auth
+  csv:
+    output:
+      path: C:\sandeep\
+      filename: k6-results.csv
+
+
+##task-id: 101
+#spring:
+#  cloud:
+#    task:
+#      observation:
+#        enabled: true
+#      single-instance-enabled: true
+#      tablePrefix: task_
+#      initialize-enabled: true
+#      name: ${task-id}
+#      execution-id: ${task-id}
+#      external-execution-id: ${task-id}
+#      parent-execution-id: ${task-id}
