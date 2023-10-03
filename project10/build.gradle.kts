@@ -25,7 +25,9 @@ dependencies {
 	implementation("org.springframework.cloud:spring-cloud-starter-task")
     implementation("com.h2database:h2")
     implementation("com.jayway.jsonpath:json-path:2.8.0")
-	testImplementation("org.springframework.boot:spring-boot-starter-test")
+    implementation("com.fasterxml.jackson.core:jackson-core:2.15.2")
+    implementation("com.fasterxml.jackson.core:jackson-annotations:2.15.2")
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
 dependencyManagement {

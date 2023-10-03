@@ -7,7 +7,7 @@ import com.sk.task.runner.writer.K6CSVOutputWriter
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.ApplicationArguments
 
-class K6OutputAggregatorTask(reader: K6JsonOutputReader, processor: K6OutputProcessor, writer: K6CSVOutputWriter):
+class K6MetricsTask(reader: K6JsonOutputReader, processor: K6OutputProcessor, writer: K6CSVOutputWriter):
         BaseRunner() {
 
     @Value("\${k6.json.input.path}") lateinit var inputPath: String

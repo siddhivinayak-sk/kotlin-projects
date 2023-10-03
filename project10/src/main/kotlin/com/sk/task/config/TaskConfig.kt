@@ -1,7 +1,7 @@
 package com.sk.task.config
 
 import com.sk.task.runner.reader.K6JsonOutputReader
-import com.sk.task.runner.K6OutputAggregatorTask
+import com.sk.task.runner.K6MetricsTask
 import com.sk.task.runner.processor.K6OutputProcessor
 import com.sk.task.runner.writer.K6CSVOutputWriter
 import org.springframework.cloud.task.configuration.EnableTask
@@ -23,5 +23,5 @@ class TaskConfig {
 
     @Bean
     fun k6OutputAggregator(reader: K6JsonOutputReader, processor: K6OutputProcessor, writer: K6CSVOutputWriter) =
-            K6OutputAggregatorTask(reader, processor, writer)
+            K6MetricsTask(reader, processor, writer)
 }
