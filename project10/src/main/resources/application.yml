@@ -1,11 +1,16 @@
 k6:
+  enabled: true
   json:
     input:
       path: C:\sandeep\code\amigos\abam\abam-bundles\k6-abam-bundle\raw_results\2023-1-validate-auth
   csv:
     output:
+      sort-before-write: true
       path: C:\sandeep\
       filename: k6-results.csv
+      summary:
+        enabled: true
+        filename: k6-results-summary.csv
 
 
 ##task-id: 101

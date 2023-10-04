@@ -13,7 +13,37 @@ class K6OutputProcessor: BaseProcessor {
         val k6Output = K6CsvMetrics(
                 vus = config[VUS],
                 cycle = config[CYCLE],
-        )
+
+                autho_min = k6JsonMetrics.metrics?.http_metrics_authorize_api?.min,
+                autho_med = k6JsonMetrics.metrics?.http_metrics_authorize_api?.med,
+                autho_max = k6JsonMetrics.metrics?.http_metrics_authorize_api?.max,
+                autho_p90 = k6JsonMetrics.metrics?.http_metrics_authorize_api?.p90,
+                autho_p95 = k6JsonMetrics.metrics?.http_metrics_authorize_api?.p95,
+                autho_avg = k6JsonMetrics.metrics?.http_metrics_authorize_api?.avg,
+                autho_pas = k6JsonMetrics.metrics?.rscua_success_auth_request?.passes,
+                autho_fai = k6JsonMetrics.metrics?.rscua_success_auth_request?.fails,
+
+                login_min = k6JsonMetrics.metrics?.http_metrics_login_api?.min,
+                login_med = k6JsonMetrics.metrics?.http_metrics_login_api?.med,
+                login_max = k6JsonMetrics.metrics?.http_metrics_login_api?.max,
+                login_p90 = k6JsonMetrics.metrics?.http_metrics_login_api?.p90,
+                login_p95 = k6JsonMetrics.metrics?.http_metrics_login_api?.p95,
+                login_avg = k6JsonMetrics.metrics?.http_metrics_login_api?.avg,
+                login_pas = k6JsonMetrics.metrics?.rscua_success_login_request?.passes,
+                login_fai = k6JsonMetrics.metrics?.rscua_success_login_request?.fails,
+
+                token_min = k6JsonMetrics.metrics?.http_metrics_token_api?.min,
+                token_med = k6JsonMetrics.metrics?.http_metrics_token_api?.med,
+                token_max = k6JsonMetrics.metrics?.http_metrics_token_api?.max,
+                token_p90 = k6JsonMetrics.metrics?.http_metrics_token_api?.p90,
+                token_p95 = k6JsonMetrics.metrics?.http_metrics_token_api?.p95,
+                token_avg = k6JsonMetrics.metrics?.http_metrics_token_api?.avg,
+                token_pas = k6JsonMetrics.metrics?.rscua_success_token_request?.passes,
+                token_fai = k6JsonMetrics.metrics?.rscua_success_token_request?.fails,
+
+                refre_pas = k6JsonMetrics.metrics?.rscua_success_refresh_token_request?.passes,
+                refre_fai = k6JsonMetrics.metrics?.rscua_success_refresh_token_request?.fails,
+                )
         return k6Output
     }
 }
