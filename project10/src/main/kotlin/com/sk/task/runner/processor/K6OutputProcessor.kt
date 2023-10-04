@@ -13,6 +13,9 @@ class K6OutputProcessor: BaseProcessor {
         val k6Output = K6CsvMetrics(
                 vus = config[VUS],
                 cycle = config[CYCLE],
+                cpu = k6JsonMetrics.infra?.cpu ?: 0.0,
+                memory = k6JsonMetrics.infra?.memory ?: 0.0,
+                network = k6JsonMetrics.infra?.network ?: 0.0,
 
                 autho_min = k6JsonMetrics.metrics?.http_metrics_authorize_api?.min,
                 autho_med = k6JsonMetrics.metrics?.http_metrics_authorize_api?.med,

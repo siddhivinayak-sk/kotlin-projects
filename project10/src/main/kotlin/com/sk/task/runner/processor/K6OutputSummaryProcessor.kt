@@ -14,6 +14,9 @@ class K6OutputSummaryProcessor: BaseProcessor {
         return K6CsvMetrics(
                 vus = config[VUS],
                 cycle = "$CYCLE$HYPHEN${csvs.metrics.size}",
+                cpu = stdDev(csvs.metrics.map { it.cpu }.toTypedArray()),
+                memory = stdDev(csvs.metrics.map { it.memory }.toTypedArray()),
+                network = stdDev(csvs.metrics.map { it.network }.toTypedArray()),
 
                 autho_min = stdDev(csvs.metrics.map { it.autho_min as Double }.toTypedArray()),
                 autho_med = stdDev(csvs.metrics.map { it.autho_med as Double }.toTypedArray()),

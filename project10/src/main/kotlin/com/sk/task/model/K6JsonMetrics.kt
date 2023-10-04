@@ -7,6 +7,7 @@ import com.sk.task.runner.base.BaseInput
 @JsonIgnoreProperties(ignoreUnknown = true)
 class K6JsonMetrics: BaseInput {
     @JsonProperty val metrics: K6Metrics? = null
+    @JsonProperty val infra: InfraMetrics? = null
 }
 
 class K6Metrics() {
@@ -228,4 +229,10 @@ class K6VusMax {
 
 class K6Thresholds {
     @JsonProperty("rate >= 0.9") val rate: Boolean? = null
+}
+
+class InfraMetrics {
+    @JsonProperty val cpu: Double? = null
+    @JsonProperty val memory: Double? = null
+    @JsonProperty val network: Double? = null
 }
