@@ -22,10 +22,10 @@ data class K6CsvMetrics(
         @CsvBindByName(column = "Auth Max")
         val autho_max: Double?,
         @CsvBindByPosition(position = 5)
-        @CsvBindByName(column = "Auth P90")
+        @CsvBindByName(column = "Auth P(90)")
         val autho_p90: Double?,
         @CsvBindByPosition(position = 6)
-        @CsvBindByName(column = "Auth P95")
+        @CsvBindByName(column = "Auth P(95)")
         val autho_p95: Double?,
         @CsvBindByPosition(position = 7)
         @CsvBindByName(column = "Auth Avg")
@@ -47,10 +47,10 @@ data class K6CsvMetrics(
         @CsvBindByName(column = "Login Max")
         val login_max: Double?,
         @CsvBindByPosition(position = 13)
-        @CsvBindByName(column = "Login P90")
+        @CsvBindByName(column = "Login P(90)")
         val login_p90: Double?,
         @CsvBindByPosition(position = 14)
-        @CsvBindByName(column = "Login P95")
+        @CsvBindByName(column = "Login P(95)")
         val login_p95: Double?,
         @CsvBindByPosition(position = 15)
         @CsvBindByName(column = "Login Avg")
@@ -72,10 +72,10 @@ data class K6CsvMetrics(
         @CsvBindByName(column = "Token Max")
         val token_max: Double?,
         @CsvBindByPosition(position = 21)
-        @CsvBindByName(column = "Token P90")
+        @CsvBindByName(column = "Token P(90)")
         val token_p90: Double?,
         @CsvBindByPosition(position = 22)
-        @CsvBindByName(column = "Token P95")
+        @CsvBindByName(column = "Token P(95)")
         val token_p95: Double?,
         @CsvBindByPosition(position = 23)
         @CsvBindByName(column = "Token Avg")
