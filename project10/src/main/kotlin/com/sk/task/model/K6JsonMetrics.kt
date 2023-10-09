@@ -235,4 +235,5 @@ class InfraMetrics {
     @JsonProperty val cpu: Double? = null
     @JsonProperty val memory: Double? = null
     @JsonProperty val network: Double? = null
+    @JsonProperty val network_: Double? = null
 }

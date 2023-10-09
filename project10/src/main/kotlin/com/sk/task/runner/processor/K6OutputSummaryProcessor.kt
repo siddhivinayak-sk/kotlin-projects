@@ -17,6 +17,7 @@ class K6OutputSummaryProcessor: BaseProcessor {
                 cpu = stdDev(csvs.metrics.map { it.cpu }.toTypedArray()),
                 memory = stdDev(csvs.metrics.map { it.memory }.toTypedArray()),
                 network = stdDev(csvs.metrics.map { it.network }.toTypedArray()),
+                network_ = stdDev(csvs.metrics.map { it.network_ }.toTypedArray()),
 
                 autho_min = stdDev(csvs.metrics.map { it.autho_min as Double }.toTypedArray()),
                 autho_med = stdDev(csvs.metrics.map { it.autho_med as Double }.toTypedArray()),

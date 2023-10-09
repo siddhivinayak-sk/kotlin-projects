@@ -16,6 +16,7 @@ class K6OutputProcessor: BaseProcessor {
                 cpu = k6JsonMetrics.infra?.cpu ?: 0.0,
                 memory = k6JsonMetrics.infra?.memory ?: 0.0,
                 network = k6JsonMetrics.infra?.network ?: 0.0,
+                network_ = k6JsonMetrics.infra?.network_ ?: 0.0,
 
                 autho_min = k6JsonMetrics.metrics?.http_metrics_authorize_api?.min,
                 autho_med = k6JsonMetrics.metrics?.http_metrics_authorize_api?.med,
