@@ -106,4 +106,11 @@ data class K6CsvMetrics(
         @CsvBindByName(column = "Refresh Failed")
         val refre_fai: Int?,
 
+        @CsvBindByPosition(position = 32)
+        @CsvBindByName(column = "Total Requests")
+        val reqs: Int?,
+        @CsvBindByPosition(position = 33)
+        @CsvBindByName(column = "RPS")
+        val rps: Double?,
+
 ): BaseOutput()

@@ -25,3 +25,7 @@ fun stdDev(numbers: Array<Double>): Double {
 fun mean(numbers: Array<Double>): Double {
     return numbers.sum() / numbers.size
 }
+
+fun mean(numbers: Array<Int>): Double {
+    return (numbers.sum() / numbers.size).toDouble()
+}

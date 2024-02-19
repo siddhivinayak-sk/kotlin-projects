@@ -1,4 +1,4 @@
-spring.cloud.gateway.default-filters[1]: AddResponseHeader=my-custom-header-0, my-custom-header-0-value
+#spring.cloud.gateway.default-filters[1]: AddResponseHeader=my-custom-header-0, my-custom-header-0-value
 
 server:
   port: 9090
@@ -62,6 +62,7 @@ spring:
           predicates:
             - Path=/graph/**
           filters:
+            - RequestLog
             - RewritePath=/graph/(?<segment>.*), /v1.0/$\{segment}
 
 

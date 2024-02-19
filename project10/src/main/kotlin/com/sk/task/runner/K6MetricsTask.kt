@@ -6,6 +6,7 @@ import com.sk.task.model.K6Csvs
 import com.sk.task.model.K6File
 import com.sk.task.model.K6Object
 import com.sk.task.runner.base.BaseRunner
+import com.sk.task.runner.processor.AGGREGATOR
 import com.sk.task.runner.processor.CYCLE
 import com.sk.task.runner.processor.K6OutputProcessor
 import com.sk.task.runner.processor.K6OutputSummaryProcessor
@@ -32,6 +33,7 @@ class K6MetricsTask(
     @Value("\${k6.csv.output.filename}") lateinit var outputFileName: String
     @Value("\${k6.csv.output.summary.enabled:false}") var outputSummaryEnabled: Boolean = false
     @Value("\${k6.csv.output.summary.filename}") lateinit var outputSummaryFileName: String
+    @Value("\${k6.csv.output.summary.aggregator:avg}") lateinit var aggregator: String
     @Value("\${k6.csv.output.sort-before-write:false}") var sortEnabled: Boolean = false
 
     override fun run(args: ApplicationArguments?) {
@@ -56,6 +58,7 @@ class K6MetricsTask(
                     .groupBy { it.vus }
                     .map { summaryProcessor.process(K6Csvs(it.value), mapOf(
                             VUS to it.key!!,
+                            AGGREGATOR to aggregator,
                     )
                     ) }
                     .map { it as K6CsvMetrics }

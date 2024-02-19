@@ -15,8 +15,8 @@ class K6OutputProcessor: BaseProcessor {
                 cycle = config[CYCLE],
                 cpu = k6JsonMetrics.infra?.cpu ?: 0.0,
                 memory = k6JsonMetrics.infra?.memory ?: 0.0,
-                network = k6JsonMetrics.infra?.network ?: 0.0,
-                network_ = k6JsonMetrics.infra?.network_ ?: 0.0,
+                network = k6JsonMetrics.infra?.network?.networkMbToKb() ?: 0.0,
+                network_ = k6JsonMetrics.infra?.network_?.networkMbToKb() ?: 0.0,
 
                 autho_min = k6JsonMetrics.metrics?.http_metrics_authorize_api?.min,
                 autho_med = k6JsonMetrics.metrics?.http_metrics_authorize_api?.med,
@@ -47,7 +47,12 @@ class K6OutputProcessor: BaseProcessor {
 
                 refre_pas = k6JsonMetrics.metrics?.rscua_success_refresh_token_request?.passes,
                 refre_fai = k6JsonMetrics.metrics?.rscua_success_refresh_token_request?.fails,
+
+                reqs = k6JsonMetrics.metrics?.http_reqs?.count,
+                rps = k6JsonMetrics.metrics?.http_reqs?.rate,
                 )
         return k6Output
     }
+
+    fun Double.networkMbToKb() = if(this < 20) this * 1024 else this
 }

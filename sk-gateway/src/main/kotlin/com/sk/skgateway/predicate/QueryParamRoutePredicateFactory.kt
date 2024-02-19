@@ -9,7 +9,6 @@ import org.springframework.validation.annotation.Validated
 import org.springframework.web.server.ServerWebExchange
 import java.util.Map
 import java.util.function.Predicate
-import javax.validation.constraints.NotEmpty
 
 @Component
 class QueryParamRoutePredicateFactory : AbstractRoutePredicateFactory<QueryParamRoutePredicateFactory.Config>(Config::class.java) {
@@ -41,7 +40,7 @@ class QueryParamRoutePredicateFactory : AbstractRoutePredicateFactory<QueryParam
 
     @Validated
     class Config {
-        var param: @NotEmpty String = ""
+        var param: String = ""
 
         fun setParam(param: String): Config {
             this.param = param

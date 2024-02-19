@@ -11,6 +11,7 @@ k6:
       summary:
         enabled: true
         filename: k6-results-summary.csv
+        aggregator: avg # possible types: first, avg, min, max, stddev
 
 
 ##task-id: 101
