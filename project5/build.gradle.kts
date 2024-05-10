@@ -17,13 +17,15 @@ val kluentVersion: String by project
 repositories {
     mavenCentral()
     jcenter()
+    maven { url = uri("https://repo.spring.io/snapshot") }
 }
 
 dependencies {
-    implementation("io.projectreactor:reactor-core:3.4.19")
+    implementation("io.projectreactor:reactor-core:3.6.5")
     implementation("com.nimbusds:nimbus-jose-jwt:9.25.6")
     implementation("org.yaml:snakeyaml:2.0")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.15.2")
+    implementation("io.micrometer:context-propagation:latest.integration")
 
     testImplementation("io.projectreactor:reactor-test:3.4.19")
     testImplementation(kotlin("test"))
