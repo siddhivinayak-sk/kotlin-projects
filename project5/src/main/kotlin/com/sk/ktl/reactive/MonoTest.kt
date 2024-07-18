@@ -62,7 +62,8 @@ fun main(args: Array<String>) {
     //useOfTag()
     //useOfTake()
     //useOfTap()
-    useOfTimed()
+    //useOfTimed()
+    checkIfMonoIsEmpty()
 }
 
 
@@ -701,6 +702,22 @@ fun useOfTimed() {
             println(it.get())
             println(it.elapsedSinceSubscription())
         }
+}
+
+fun checkIfMonoIsEmpty() {
+    val mono = Mono.empty<String>()
+    mono.hasElement()
+            .flatMap {
+                if(it.not()) {
+                    println("mono is empty")
+                    Mono.empty()
+                } else {
+                    mono
+                }
+            }
+            .doOnNext { println(it) }
+            .subscribe()
+
 }
 
 fun useOfTimeout() {

@@ -26,6 +26,7 @@ dependencies {
     implementation("org.yaml:snakeyaml:2.0")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.15.2")
     implementation("io.micrometer:context-propagation:latest.integration")
+    implementation("org.apache.tika:tika-core:2.9.2")
 
     testImplementation("io.projectreactor:reactor-test:3.4.19")
     testImplementation(kotlin("test"))

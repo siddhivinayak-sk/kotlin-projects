@@ -42,7 +42,7 @@ val JWS_ALG: JWSAlgorithm = JWSAlgorithm.RS256
 val BASE64_DECODER: Base64.Decoder = Base64.getDecoder()
 val objectMapper = ObjectMapper()
 
-fun createToken(configFile: String, tokenData: String, environment: String) {
+fun createToken(configFile: String, tokenData: String, environment: String): String {
     val config = parseYaml(configFile, environment)
     val claims = createClaims(tokenData)
     val jwtToken = serializedSignedJwt(config, claims)
@@ -54,6 +54,7 @@ fun createToken(configFile: String, tokenData: String, environment: String) {
     println(encryptedToken)
     println("")
     tokenInfo(configFile, encryptedToken!!, true, environment)
+    return jwtToken
 }
 
 fun tokenInfo(configFile: String, token: String, isJwe: Boolean, environment: String) {
@@ -81,13 +82,13 @@ fun parseYaml(file: String, environment: String): ConfigDto {
 fun keyFactory():KeyFactory = KeyFactory.getInstance(ALG)
 
 fun rsaPublicKey(configDto: ConfigDto, keyFactory: KeyFactory): RSAPublicKey {
-    val base64 = BASE64_DECODER.decode(configDto.jwe?.public?.key?.toByteArray())
+    val base64 = base64Decoder(configDto.jwe?.public?.key!!)
     val spec = X509EncodedKeySpec(base64)
     return keyFactory.generatePublic(spec) as RSAPublicKey
 }
 
 fun rsaPrivateKey(configDto: ConfigDto, keyFactory: KeyFactory): PrivateKey =
-        keyFactory.generatePrivate(PKCS8EncodedKeySpec(BASE64_DECODER.decode(configDto.jwe?.private?.key)))
+        keyFactory.generatePrivate(PKCS8EncodedKeySpec(base64Decoder(configDto.jwe?.private?.key!!)))
 
 fun rsaPKey(publicKey: RSAPublicKey): RSAKey = RSAKey.Builder(publicKey).build()
 
@@ -139,7 +140,7 @@ fun jwtParse(configDto: ConfigDto, token: String): Jwt {
     return Jwt(jwt, headers, jwt.jwtClaimsSet, valid, errorMessage)
 }
 
-fun keySpec(configDto: ConfigDto) = SecretKeySpec(BASE64_DECODER.decode(configDto.jwe?.encryption?.key), ENC_METHOD.name)
+fun keySpec(configDto: ConfigDto) = SecretKeySpec(base64Decoder(configDto.jwe?.encryption?.key!!), ENC_METHOD.name)
 
 fun decrypter(keySpec: SecretKeySpec) = DirectDecrypter(keySpec)
 
@@ -161,6 +162,14 @@ fun jweDecrypt(configDto: ConfigDto, encryptedToken: String): String {
 
 fun createClaims(claimsString: String): Map<String, Any> =
         objectMapper.readValue(claimsString, object: TypeReference<Map<String, Any>>() {})
+
+fun base64Decoder(text: String): ByteArray {
+    return try {
+        BASE64_DECODER.decode(text)
+    } catch(ex: Exception) {
+        com.nimbusds.jose.util.Base64(text).decode()
+    }
+}
 
 open class Dto
 class EncryptionDto: Dto() { var key: String? = null }

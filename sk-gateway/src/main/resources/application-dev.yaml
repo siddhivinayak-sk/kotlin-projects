@@ -43,8 +43,8 @@ spring:
           filters:
             - RewritePath=/websocket-test/resources/(?<segment>.*), /websocket-test/resources/$\{segment}
         - id: priority_test_regex
-          uri: http://localhost:80
-          order: 1
+          uri: https://httpbin.org
+          order: -1
           predicates:
             - Path=/route/**
           filters:
@@ -64,7 +64,6 @@ spring:
           filters:
             - RequestLog
             - RewritePath=/graph/(?<segment>.*), /v1.0/$\{segment}
-
 
 management:
   health:
