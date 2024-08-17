@@ -30,8 +30,10 @@ import org.yaml.snakeyaml.constructor.Constructor
 import java.io.FileInputStream
 import java.security.KeyFactory
 import java.security.PrivateKey
+import java.security.interfaces.RSAPrivateCrtKey
 import java.security.interfaces.RSAPublicKey
 import java.security.spec.PKCS8EncodedKeySpec
+import java.security.spec.RSAPublicKeySpec
 import java.security.spec.X509EncodedKeySpec
 import java.util.*
 import javax.crypto.spec.SecretKeySpec
@@ -88,7 +90,10 @@ fun rsaPublicKey(configDto: ConfigDto, keyFactory: KeyFactory): RSAPublicKey {
 }
 
 fun rsaPrivateKey(configDto: ConfigDto, keyFactory: KeyFactory): PrivateKey =
-        keyFactory.generatePrivate(PKCS8EncodedKeySpec(base64Decoder(configDto.jwe?.private?.key!!)))
+        rsaPrivateKey(configDto.jwe?.private?.key!!, keyFactory)
+
+fun rsaPrivateKey(privateKey: String, keyFactory: KeyFactory): PrivateKey =
+        keyFactory.generatePrivate(PKCS8EncodedKeySpec(base64Decoder(privateKey)))
 
 fun rsaPKey(publicKey: RSAPublicKey): RSAKey = RSAKey.Builder(publicKey).build()
 
@@ -185,3 +190,13 @@ class ConfigDto: Dto() {
     var env: String? = null
 }
 data class Jwt(val jwt: JWT, val headers: Map<String, Any>, val jwtClaimsSet: JWTClaimsSet, val valid: Boolean, val validationFailMessage: String? = null)
+
+fun publicKeyFromPrivateKey(privateKey: String): String {
+    val keyFactory = keyFactory()
+    val simplePrivateKey = rsaPrivateKey(privateKey, keyFactory)
+    val rsaPrivateKey: RSAPrivateCrtKey = simplePrivateKey as RSAPrivateCrtKey
+
+    val publicKeySpec = RSAPublicKeySpec(rsaPrivateKey.modulus, rsaPrivateKey.publicExponent)
+    val myPublicKey = keyFactory.generatePublic(publicKeySpec)
+    return Base64.getEncoder().encodeToString(myPublicKey.encoded)
+}
