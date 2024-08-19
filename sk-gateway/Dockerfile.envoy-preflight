@@ -1,0 +1,8 @@
+FROM alpine:latest
+RUN apk update && \
+apk --no-cache add curl && \
+curl -L https://github.com/siddhivinayak-sk/app-envoy-preflight/releases/download/1.0.0/envoy-preflight -o /usr/bin/envoy-preflight && \
+chmod +x /usr/bin/envoy-preflight
+
+
+# Build Image: docker build --rm --no-cache -t envoy-preflight:1.0.0 -f Dockerfile.envoy-preflight .

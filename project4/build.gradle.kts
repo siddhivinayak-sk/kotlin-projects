@@ -8,7 +8,7 @@ plugins {
 	id("io.spring.dependency-management") version "1.0.11.RELEASE"
 	id("org.asciidoctor.jvm.convert") version "3.3.2"
 	id("org.springframework.cloud.contract") version "3.1.3"
-	id("org.springdoc.openapi-gradle-plugin") version "1.3.4"
+	id("org.springdoc.openapi-gradle-plugin") version "1.9.0"
 	jacoco
 	kotlin("jvm") version "1.6.21"
 	kotlin("plugin.spring") version "1.6.21"
