@@ -1,7 +1,7 @@
 package com.sk.ktl.nimbus
 
 /**
-env: server-proxy_test
+env: test
 jwe:
   encryption:
     key: <some key AES256>
@@ -14,7 +14,7 @@ jwe:
 
 const val configFile = ""
 const val sourceFile = ""
-const val environment = ""
+const val environment = "test"
 const val generateToken = true
 val kid = null
 val source = readSource(sourceFile)
