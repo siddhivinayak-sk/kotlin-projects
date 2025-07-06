@@ -2,6 +2,7 @@ package com.sk.ktl.nimbus
 
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.nimbusds.jose.CompressionAlgorithm.DEF
 import com.nimbusds.jose.EncryptionMethod
 import com.nimbusds.jose.JOSEObjectType
 import com.nimbusds.jose.JWEAlgorithm
@@ -44,14 +45,14 @@ val JWS_ALG: JWSAlgorithm = JWSAlgorithm.RS256
 val BASE64_DECODER: Base64.Decoder = Base64.getDecoder()
 val objectMapper = ObjectMapper()
 
-fun createToken(configFile: String, tokenData: String, environment: String): String {
+fun createToken(configFile: String, tokenData: String, environment: String, kid: String?): String {
     val config = parseYaml(configFile, environment)
     val claims = createClaims(tokenData)
-    val jwtToken = serializedSignedJwt(config, claims)
+    val jwtToken = serializedSignedJwt(config, claims, kid)
     println("Jwt Token: ")
     println(jwtToken)
     println("")
-    val encryptedToken = jweEncrypt(config, jwtToken)
+    val encryptedToken = jweEncrypt(config, jwtToken, kid)
     println("JWE Token: ")
     println(encryptedToken)
     println("")
@@ -105,8 +106,7 @@ fun jwtProcessor(jwsKeySelectorObj:  JWSVerificationKeySelector<SimpleSecurityCo
         .apply { jwsKeySelector = jwsKeySelectorObj }
 
 
-fun signedJWT(claims: Map<String, Any?>, rsaPrivateKey: PrivateKey): SignedJWT {
-    val keyId: String? = null
+fun signedJWT(claims: Map<String, Any?>, rsaPrivateKey: PrivateKey, keyId: String?): SignedJWT {
     val header = JWSHeader.Builder(JWSAlgorithm.RS256)
             .type(JOSEObjectType.JWT)
             .apply { keyId?.let { keyID(keyId) } }
@@ -118,10 +118,10 @@ fun signedJWT(claims: Map<String, Any?>, rsaPrivateKey: PrivateKey): SignedJWT {
     return SignedJWT(header, payload).apply { sign(RSASSASigner(rsaPrivateKey)) }
 }
 
-fun serializedSignedJwt(configDto: ConfigDto, claims: Map<String, Any?>): String {
+fun serializedSignedJwt(configDto: ConfigDto, claims: Map<String, Any?>, kid: String?): String {
     val keyFactory = keyFactory()
     val rsaPrivateKey = rsaPrivateKey(configDto, keyFactory)
-    val signedJWT = signedJWT(claims, rsaPrivateKey)
+    val signedJWT = signedJWT(claims, rsaPrivateKey, kid)
     return signedJWT.serialize()
 }
 
@@ -151,10 +151,19 @@ fun decrypter(keySpec: SecretKeySpec) = DirectDecrypter(keySpec)
 
 fun encrypter(keySpec: SecretKeySpec) = DirectEncrypter(keySpec)
 
-fun jweEncrypt(configDto: ConfigDto, plainJson: String): String? {
+fun jweEncrypt(configDto: ConfigDto, plainJson: String, kid: String?): String? {
     val keySpec = keySpec(configDto)
     val encrypter = encrypter(keySpec)
-    return JWEObject(JWEHeader(JWEAlgorithm.DIR, ENC_METHOD), Payload(JWSObject.parse(plainJson)))
+    val jweHeader = JWEHeader.Builder(JWEAlgorithm.DIR, ENC_METHOD).apply {
+            if (kid != null) {
+                keyID(kid)
+            }
+            if (configDto.jwe!!.compression) {
+                compressionAlgorithm(DEF)
+            }
+        }
+        .build()
+    return JWEObject(jweHeader, Payload(JWSObject.parse(plainJson)))
             .apply { encrypt(encrypter) }
             .serialize()
 }
@@ -184,6 +193,7 @@ class JweDto: Dto() {
     var encryption: EncryptionDto? = null
     var private: PrivateDto? = null
     var public: PublicDto? = null
+    var compression: Boolean = false
 }
 class ConfigDto: Dto() {
     var jwe: JweDto? = null
@@ -191,12 +201,20 @@ class ConfigDto: Dto() {
 }
 data class Jwt(val jwt: JWT, val headers: Map<String, Any>, val jwtClaimsSet: JWTClaimsSet, val valid: Boolean, val validationFailMessage: String? = null)
 
-fun publicKeyFromPrivateKey(privateKey: String): String {
+fun publicKeyFromPrivateKey(configFile: String, environment: String) {
+    val config = parseYaml(configFile, environment)
+    val privateKey: String = config.jwe?.private?.key!!
     val keyFactory = keyFactory()
     val simplePrivateKey = rsaPrivateKey(privateKey, keyFactory)
     val rsaPrivateKey: RSAPrivateCrtKey = simplePrivateKey as RSAPrivateCrtKey
 
     val publicKeySpec = RSAPublicKeySpec(rsaPrivateKey.modulus, rsaPrivateKey.publicExponent)
     val myPublicKey = keyFactory.generatePublic(publicKeySpec)
-    return Base64.getEncoder().encodeToString(myPublicKey.encoded)
+    println("Public Key: " + Base64.getEncoder().encodeToString(myPublicKey.encoded))
+}
+
+fun readSource(file: String): String {
+    return FileInputStream(file).use { inputStream ->
+        inputStream.bufferedReader().use { it.readText() }
+    }
 }
