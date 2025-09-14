@@ -12,6 +12,7 @@ import org.springframework.ai.embedding.EmbeddingModel
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor
 import org.springframework.beans.factory.support.BeanDefinitionRegistry
 import org.springframework.beans.factory.support.GenericBeanDefinition
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -21,6 +22,7 @@ import java.util.function.Supplier
 @Configuration(proxyBeanMethods = false)
 @Order(0)
 @EnableConfigurationProperties(ModelProperties::class)
+@ConditionalOnProperty(prefix = "app.chat", name = ["enabled"], havingValue = "true", matchIfMissing = false)
 class EmbeddingModelConfig {
 
     @Bean

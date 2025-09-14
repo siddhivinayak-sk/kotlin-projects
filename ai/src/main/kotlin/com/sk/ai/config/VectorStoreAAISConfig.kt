@@ -8,9 +8,9 @@ import com.sk.ai.config.properties.VectorStoreProperties
 import org.springframework.ai.embedding.EmbeddingModel
 import org.springframework.ai.vectorstore.VectorStore
 import org.springframework.ai.vectorstore.azure.AzureVectorStore
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Conditional
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.annotation.Order
 import java.util.stream.Collectors
@@ -18,7 +18,7 @@ import java.util.stream.Collectors
 @Configuration(proxyBeanMethods = false)
 @Order(1)
 @EnableConfigurationProperties(VectorStoreProperties::class)
-@ConditionalOnProperty(prefix = "vector.azureAiSearch", name = ["enabled"], havingValue = "true", matchIfMissing = false)
+@Conditional(VectorStoreCondition::class)
 class VectorStoreAAISConfig {
 
     @Bean

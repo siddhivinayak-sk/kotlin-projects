@@ -7,11 +7,13 @@ import org.springframework.ai.tool.execution.ToolExecutionExceptionProcessor
 import org.springframework.ai.tool.resolution.DelegatingToolCallbackResolver
 import org.springframework.ai.tool.resolution.StaticToolCallbackResolver
 import org.springframework.ai.tool.resolution.ToolCallbackResolver
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Description
 
 @Configuration(proxyBeanMethods = false)
+@ConditionalOnProperty(prefix = "app.chat", name = ["enabled"], havingValue = "true", matchIfMissing = false)
 class ToolConfig {
     @Bean
     fun toolExecutionExceptionProcessor(): ToolExecutionExceptionProcessor { //Exception handleing for tools
