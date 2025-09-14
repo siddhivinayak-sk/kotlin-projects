@@ -1,6 +1,8 @@
 spring:
   application:
     name: ai
+  main:
+    banner-mode: off
   ai:
 
 # MCP Server  Configuration
@@ -12,12 +14,13 @@ spring:
         version: 1.0.0
         instructions: You are a helpful assistant.
         type: SYNC
+        protocol: STATELESS
         resource-change-notification: true
         prompt-change-notification: true
         tool-change-notification: true
         sse-message-endpoint: /mcp/message
         sse-endpoint: /sse
-        base-url: /my-mcp-server
+        base-url: /
         request-timeout: 30s
         capabilities:
           resource: true
@@ -103,3 +106,7 @@ content:
     enabled: false
     input-directory: C:/sandeep/work/trails/kotlin-projects/ai/input/tika
     extensions: pdf,doc,docx,ppt,pptx,xls,xlsx,odt,rtf,txt,html,html,md
+
+logging:
+  file:
+    name: ./build/logs/ai.log

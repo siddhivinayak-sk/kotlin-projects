@@ -1,0 +1,19 @@
+{
+  "inputs": [],
+  "servers": {
+    "local_custom_mcp": {
+     	"url": "http://localhost:3333/sse",
+     	"type": "http"
+    },
+    "spring-ai-tools": {
+      "command": "java",
+      "args": [
+        "-Dspring.ai.mcp.server.stdio=true",
+        "-Dspring.main.web-application-type=none",
+        "-Dlogging.pattern.console=",
+        "-jar",
+        "./build/libs/ai-0.0.1-SNAPSHOT.jar"
+      ]
+    }
+  }
+}

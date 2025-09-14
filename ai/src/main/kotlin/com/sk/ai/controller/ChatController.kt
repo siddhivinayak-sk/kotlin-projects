@@ -153,7 +153,7 @@ class ChatController(
     }
 
     @GetMapping("/mapOutputConverter")
-    fun mapOutputConverter(): Map<String, Object>? {
+    fun mapOutputConverter(): Map<String, Any>? {
         return chatClient
                 .prompt()
                 .user {
@@ -162,7 +162,7 @@ class ChatController(
                             .param("subject", "an array of numbers from 1 to 9 under they key name 'numbers'")
                 }
                 .call()
-                .entity(object : ParameterizedTypeReference<Map<String, Object>>() {})
+                .entity(object : ParameterizedTypeReference<Map<String, Any>>() {})
     }
 
     @GetMapping("/listOutputConverter")
