@@ -1,0 +1,102 @@
+spring:
+  application:
+    name: ai
+  ai:
+    mcp:
+      server:
+        enabled: true
+        stdio: false
+        name: my-mcp-server
+        version: 1.0.0
+        instructions: You are a helpful assistant.
+        type: SYNC
+        resource-change-notification: true
+        prompt-change-notification: true
+        tool-change-notification: true
+        sse-message-endpoint: /mcp/message
+        sse-endpoint: /sse
+        base-url: /my-mcp-server
+        request-timeout: 30s
+        capabilities:
+          resource: true
+          tool: true
+          prompt: true
+          completion: true
+
+app:
+  chat:
+    enabled: true
+  chat-memory-count: 20
+  chat-memory-type: PROMPT
+  models:
+    openai:
+      enabled: true
+      model-type: OAI_GPT_4_1
+      base-url: ${AZURE_OPENAI_ENDPOINT}
+      model-name: ${AZURE_OPENAI_DEPLOYMENT}
+      api-key: ${AZURE_OPENAI_API_KEY}
+      system-prompt: You are a helpful assistant.
+      user-prompt: developer
+      max-tokens: 2048
+      maxCompletionTokens: 1024
+      top-p: 1.0
+      frequency-penalty: 0.0
+      presence-penalty: 0.0
+      n: 1
+      temperature: 0.7
+  embeddings:
+    text-embedding-3-large:
+      enabled: true
+      model-type: OAI_TEXT_EMBEDDING_3_LARGE
+      base-url: ${AZURE_OPENAI_ENDPOINT}
+      model-name: ${AZURE_OPENAI_EM_DEPLOYMENT}
+      api-key: ${AZURE_OPENAI_API_KEY}
+      user: dev-0
+
+vector:
+  azureAiSearch:
+    enabled: true
+    endpoint: ${AZURE_AI_SEARCH_ENDPOINT}
+    api-key: ${AZURE_AI_SEARCH_KEY}
+    index-name: test-index
+    initializationSchema: true
+#    metadataFields:
+#      country: text
+#      year: int64
+#      activationDate: date
+
+# Index content from various file types to vector database
+content:
+  pdf:
+    enabled: false
+    input-directory: C:/sandeep/work/trails/kotlin-projects/ai/input/pdf
+    extensions: pdf
+    transformers:
+      splitter:
+        defaultChunkSize: 800
+      keyword:
+        keywordCount: 20
+      summary:
+        summaryTypes: CURRENT
+  json:
+    enabled: false
+    input-directory: C:/sandeep/work/trails/kotlin-projects/ai/input/json
+    txtField: description
+    extensions: json
+  txt:
+    enabled: false
+    input-directory: C:/sandeep/work/trails/kotlin-projects/ai/input/txt
+    extensions: txt
+  html:
+    enabled: false
+    input-directory: C:/sandeep/work/trails/kotlin-projects/ai/input/html
+    extensions: html
+  md:
+    enabled: false
+    input-directory: C:/sandeep/work/trails/kotlin-projects/ai/input/md
+    extensions: md
+  tika:
+    enabled: false
+    input-directory: C:/sandeep/work/trails/kotlin-projects/ai/input/tika
+    extensions: pdf,doc,docx,ppt,pptx,xls,xlsx,odt,rtf,txt,html,html,md
+

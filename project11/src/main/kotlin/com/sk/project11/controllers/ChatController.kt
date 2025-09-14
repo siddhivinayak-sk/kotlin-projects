@@ -1,6 +1,5 @@
 package com.sk.project11.controllers
 
-import org.springframework.ai.chat.ChatOptions
 import org.springframework.ai.chat.ChatResponse
 import org.springframework.ai.chat.messages.UserMessage
 import org.springframework.ai.chat.prompt.Prompt
@@ -20,7 +19,7 @@ class ChatController(
 ) {
 
     @GetMapping("/ai/generate")
-    fun generate(@RequestParam(value = "message", defaultValue = "Tell me a joke") message: String?): Map<*, *>? {
+    fun generate(@RequestParam(value = "message", defaultValue = "Tell me a joke") message: String): Map<*, *>? {
         val prompt = Prompt(UserMessage(message))
         val chatResponse = ollamaChatClient.call(prompt)
         return mapOf(
@@ -31,7 +30,7 @@ class ChatController(
     }
 
     @GetMapping("/ai/generateStream")
-    fun generateStream(@RequestParam(value = "message", defaultValue = "Tell me a joke") message: String?): Flux<ChatResponse?>? {
+    fun generateStream(@RequestParam(value = "message", defaultValue = "Tell me a joke") message: String): Flux<ChatResponse?>? {
         val prompt = Prompt(UserMessage(message))
         return ollamaChatClient.stream(prompt)
     }
