@@ -1,23 +1,30 @@
 package com.sk.ai.config.mcp.server
 
+import org.springframework.ai.chat.client.ChatClient
+import org.springframework.ai.chat.client.advisor.api.Advisor
 import org.springframework.ai.tool.ToolCallback
 import org.springframework.ai.tool.ToolCallbackProvider
 import org.springframework.ai.tool.annotation.Tool
 import org.springframework.ai.tool.annotation.ToolParam
 import org.springframework.ai.tool.function.FunctionToolCallback
 import org.springframework.ai.tool.method.MethodToolCallbackProvider
+import org.springframework.ai.vectorstore.VectorStore
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestClient
 import java.util.function.Consumer
+import com.sk.ai.util.ragAdvisor
 
 @Configuration(proxyBeanMethods = false)
 class McpConfig {
 
     @Bean
-    fun weatherTools(weatherService: WeatherService): ToolCallbackProvider {
-        return MethodToolCallbackProvider.builder().toolObjects(weatherService).build()
+    fun toolCallbackProvider(
+            weatherService: WeatherService,
+            queryToolsService: QueryToolsService,
+    ): ToolCallbackProvider {
+        return MethodToolCallbackProvider.builder().toolObjects(weatherService, queryToolsService).build()
     }
 
     data class TextInput(val input: String)
@@ -77,6 +84,7 @@ class WeatherService {
             val shortForecast: String? = null,
             val detailedForecast: String? = null,
     )
+
     @Tool(description = "Get weather forecast for a specific latitude/longitude")
     fun getWeatherForecastByLocation(latitude: Double, longitude: Double): String {
         val points = restTemplate.get().uri("/points/{latitude},{longitude}", latitude, longitude).retrieve().body(Points::class.java)
@@ -87,6 +95,24 @@ class WeatherService {
             Wind: ${it.windSpeed} ${it.windDirection}
             DetailedForecast: ${it.detailedForecast}
         """.trimIndent() } ?: ""
+    }
+}
+
+@Service
+class QueryToolsService(
+        private val chatClient: ChatClient?,
+        private val vectorStore: VectorStore?
+) {
+
+    @Tool(name = "info", description = "Into tool is designed to provide answer domain specific queries. It leverages a vector store to retrieve relevant information and uses a chat client to generate a grounded answer based on the retrieved data.")
+    fun info(@ToolParam(description =  "The query for which grounded answer is to be generated", required = true) query: String): String {
+        val advisors = mutableListOf<Advisor>()
+        vectorStore?.let { advisors.add(it.ragAdvisor()) }
+        return chatClient
+                ?.prompt()
+                ?.user(query)
+                ?.advisors(advisors)
+                ?.call()?.content() ?: throw IllegalStateException("ChatClient is not configured")
     }
 }
 
