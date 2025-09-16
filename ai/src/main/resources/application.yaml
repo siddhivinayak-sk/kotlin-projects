@@ -91,7 +91,7 @@ app:
 # Configure vector database
 vector:
   azureAiSearch:
-    enabled: true
+    enabled: false
     endpoint: ${AZURE_AI_SEARCH_ENDPOINT}
     api-key: ${AZURE_AI_SEARCH_KEY}
     index-name: test-index
@@ -100,16 +100,28 @@ vector:
 #      country: text
 #      year: int64
 #      activationDate: date
+  milvus:
+    enabled: true
+    host: localhost
+    port: 19530
+    database: default
+    collectionName: my_collection
+    username: root
+    password: Milvus
+    initializationSchema: true
+    embeddingDimension: 3072
 
 # Index content from various file types to vector database
 content:
   pdf:
-    enabled: false
+    enabled: true
     input-directory: C:/sandeep/work/trails/kotlin-projects/ai/input/pdf
+    pagesPerDocument: 1
+    paragraph: false
     extensions: pdf
     transformers:
       splitter:
-        defaultChunkSize: 800
+        defaultChunkSize: 1000
       keyword:
         keywordCount: 20
       summary:

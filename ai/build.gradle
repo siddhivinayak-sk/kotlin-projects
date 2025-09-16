@@ -38,6 +38,7 @@ dependencies {
     implementation "org.springframework.ai:spring-ai-openai" //OpenAI ChatModel
     implementation "org.springframework.ai:spring-ai-azure-openai" //Azure OpenAI ChatModel Manual
     implementation "org.springframework.ai:spring-ai-azure-store" //Azure AI Search
+    implementation "org.springframework.ai:spring-ai-milvus-store" //Milvus
     implementation 'org.springframework.ai:spring-ai-starter-mcp-client'
     implementation 'org.springframework.ai:spring-ai-starter-mcp-server'
     implementation 'org.springframework.ai:spring-ai-starter-mcp-server-webmvc'

@@ -18,7 +18,7 @@ import java.util.stream.Collectors
 @Configuration(proxyBeanMethods = false)
 @Order(1)
 @EnableConfigurationProperties(VectorStoreProperties::class)
-@Conditional(VectorStoreCondition::class)
+@Conditional(AzureAIVectorStoreCondition::class)
 class VectorStoreAAISConfig {
 
     @Bean

@@ -20,6 +20,8 @@ data class ContentDetail(
         val txtField: String = "",
         val extensions: List<String> = emptyList(),
         val transformers: Map<String, TransformerConfig> = emptyMap(),
+        val paragraph: Boolean = false,
+        val pagesPerDocument: Int = 1,
 )
 
 data class TransformerConfig(
