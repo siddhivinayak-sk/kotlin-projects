@@ -21,6 +21,7 @@ repositories {
 
 ext {
 	set('springAiVersion', "1.0.1")
+    set('postgresVersion', "42.7.7")
 }
 
 dependencies {
@@ -39,9 +40,13 @@ dependencies {
     implementation "org.springframework.ai:spring-ai-azure-openai" //Azure OpenAI ChatModel Manual
     implementation "org.springframework.ai:spring-ai-azure-store" //Azure AI Search
     implementation "org.springframework.ai:spring-ai-milvus-store" //Milvus
-    implementation 'org.springframework.ai:spring-ai-starter-mcp-client'
-    implementation 'org.springframework.ai:spring-ai-starter-mcp-server'
-    implementation 'org.springframework.ai:spring-ai-starter-mcp-server-webmvc'
+    implementation 'org.springframework.ai:spring-ai-starter-mcp-client' //MCP Client
+    implementation 'org.springframework.ai:spring-ai-starter-mcp-server' //MCP Server Core
+    implementation 'org.springframework.ai:spring-ai-starter-mcp-server-webmvc' //MCP Server Web
+    implementation 'org.springframework.ai:spring-ai-postgresml' //PostgresML EmbeddingModel
+    implementation 'org.springframework.ai:spring-ai-pgvector-store' //PGVector
+    runtimeOnly "org.postgresql:postgresql:${postgresVersion}" //PostgreSQL Driver
+
 
     //implementation "org.springframework.ai:spring-ai-starter-model-azure-openai" //Azure OpenAI Starter
 	//implementation 'org.springframework.ai:spring-ai-starter-model-chat-memory-repository-jdbc'

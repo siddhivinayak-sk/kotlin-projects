@@ -2,12 +2,15 @@ package com.sk.ai.config.properties
 
 import io.milvus.param.IndexType
 import io.milvus.param.MetricType
+import org.springframework.ai.vectorstore.pgvector.PgVectorStore
+import org.springframework.ai.vectorstore.pgvector.PgVectorStore.PgDistanceType
 import org.springframework.boot.context.properties.ConfigurationProperties
 
-@ConfigurationProperties(prefix = "vector", )
+@ConfigurationProperties(prefix = "vector")
 data class VectorStoreProperties(
         val azureAiSearch: AzureAiVectorStoreProperties,
         val milvus: MilvusVectorStoreProperties,
+        val pg: PGVectorStoreProperties,
 )
 
 data class AzureAiVectorStoreProperties(
@@ -38,4 +41,19 @@ data class MilvusVectorStoreProperties(
         val contentFieldName: String = "content",
         val metadataFieldName: String = "metadata",
         val embeddingFieldName: String = "embedding",
+)
+
+data class PGVectorStoreProperties(
+        val enabled: Boolean,
+        val url: String,
+        val username: String,
+        val password: String,
+        val indexType: PgVectorStore.PgIndexType = PgVectorStore.PgIndexType.HNSW,
+        val distanceType: PgDistanceType = PgDistanceType.COSINE_DISTANCE,
+        val dimensions: Int = 1536,
+        val removeExistingVectorStoreTable: Boolean = false,
+        val initializeSchema: Boolean = false,
+        val schemaName: String = "public",
+        val tableName: String = "vector_store",
+        val maxDocumentBatchSize: Int = 10000,
 )

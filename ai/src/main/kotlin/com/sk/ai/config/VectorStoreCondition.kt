@@ -30,3 +30,16 @@ class MilvusVectorStoreCondition : SpringBootCondition() {
         }
     }
 }
+
+class PgVectorStoreCondition : SpringBootCondition() {
+    override fun getMatchOutcome(context: ConditionContext, metadata: AnnotatedTypeMetadata): ConditionOutcome {
+        val env = context.environment
+        val enabledChat = env.getProperty("app.chat.enabled") == "true"
+        val enabledVector = env.getProperty("vector.pg.enabled") == "true"
+        return if (enabledChat && enabledVector) {
+            ConditionOutcome.match()
+        } else {
+            ConditionOutcome.noMatch("Required properties not set so VectorStoreCondition did not match")
+        }
+    }
+}

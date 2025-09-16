@@ -32,7 +32,8 @@ enum class ChatModelType {
 }
 
 enum class EmbeddingModelType {
-    OAI_TEXT_EMBEDDING_3_LARGE
+    OAI_TEXT_EMBEDDING_3_LARGE,
+    POSTGRES_ML_DISTILBERT_BASE_UNCASED,
 }
 
 enum class ChatMemoryType {
@@ -43,10 +44,12 @@ enum class ChatMemoryType {
 data class EmbeddingModelConfig(
         val enabled: Boolean,
         val modelType: EmbeddingModelType,
-        val baseUrl: String,
-        val modelName: String,
-        val apiKey: String,
-        val user: String?,
-        val inputType: String?,
-        val dimension: Int?
+        val baseUrl: String = "",
+        val modelName: String = "",
+        val apiKey: String = "",
+        val user: String? = null,
+        val inputType: String? = null,
+        val dimension: Int? = null,
+        val kwargs: Map<String, Any> = emptyMap(),
+        val transformer: String = "",
 )
