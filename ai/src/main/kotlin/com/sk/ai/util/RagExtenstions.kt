@@ -68,7 +68,7 @@ private fun VectorStore.allowEmptyContextRag(): Advisor {
     return RetrievalAugmentationAdvisor.builder()
             .documentRetriever(
                     VectorStoreDocumentRetriever.builder()
-                            .similarityThreshold(0.50)
+                            .similarityThreshold(0.40)
                             .vectorStore(this)
                             .build()
             )
