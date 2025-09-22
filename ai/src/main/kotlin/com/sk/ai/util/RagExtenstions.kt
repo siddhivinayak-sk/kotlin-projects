@@ -70,6 +70,7 @@ private fun VectorStore.allowEmptyContextRag(): Advisor {
                     VectorStoreDocumentRetriever.builder()
                             .similarityThreshold(0.40)
                             .vectorStore(this)
+                            .topK(10)
                             .build()
             )
             .queryAugmenter(

@@ -90,7 +90,9 @@ app:
     postgres-ml:
       enabled: true
       model-type: POSTGRES_ML_DISTILBERT_BASE_UNCASED
-      transformer: "distilbert-base-uncased"
+      #transformer: "distilbert-base-uncased"
+      #transformer: sentence-transformers/all-MiniLM-L6-v2
+      transformer: BAAI/bge-m3
       kwargs:
         device: cpu
 
@@ -121,7 +123,9 @@ vector:
     url: jdbc:postgresql://localhost:5433/postgresml
     username: postgres
     password: example
-    dimensions: 768
+    #dimensions: 768 # distilbert-base-uncased
+    #dimensions: 384 # all-MiniLM-L6-v2
+    dimensions: 1024 # BAAI/bge-m3
 
 # Index content from various file types to vector database
 content:
