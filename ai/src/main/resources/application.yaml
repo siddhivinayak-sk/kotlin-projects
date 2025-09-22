@@ -118,9 +118,10 @@ vector:
     embeddingDimension: 3072
   pg:
     enabled: true
-    url: jdbc:postgresql://localhost:54321/postgres
+    url: jdbc:postgresql://localhost:5433/postgresml
     username: postgres
     password: example
+    dimensions: 768
 
 # Index content from various file types to vector database
 content:

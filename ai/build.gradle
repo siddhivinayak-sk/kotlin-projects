@@ -21,7 +21,7 @@ repositories {
 
 ext {
 	set('springAiVersion', "1.0.1")
-    set('postgresVersion', "42.7.7")
+    set('postgresVersion', "42.7.4")
 }
 
 dependencies {
@@ -72,4 +72,8 @@ kotlin {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+tasks.named('bootRun') {
+    systemProperty 'user.timezone', 'Asia/Kolkata'
 }
