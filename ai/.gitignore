@@ -42,3 +42,4 @@ out/
 ### Extra ###
 input
 milvus/volumes
+.env

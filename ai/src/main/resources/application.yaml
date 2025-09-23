@@ -121,8 +121,8 @@ vector:
   pg:
     enabled: true
     url: jdbc:postgresql://localhost:5433/postgresml
-    username: postgres
-    password: example
+    username: postgresml
+    password: postgresml
     #dimensions: 768 # distilbert-base-uncased
     #dimensions: 384 # all-MiniLM-L6-v2
     dimensions: 1024 # BAAI/bge-m3

@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  postgresml:
+    image: ghcr.io/postgresml/postgresml:2.10.0
+    container_name: postgresml
+    ports:
+      - "5433:5432"   # Postgres
+      - "8000:8000"   # ML API
+    volumes:
+      - postgresml_data:/var/lib/postgresql
+      - ./pg/init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      POSTGRES_DB: postgresml
+      POSTGRES_USER: postgresml
+      POSTGRES_PASSWORD: postgresml
+    restart: unless-stopped
+
+  ai:
+    build: .
+    image: ai:latest
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgresml
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgresml:5432/postgresml
+      SPRING_DATASOURCE_USERNAME: postgresml
+      SPRING_DATASOURCE_PASSWORD: postgresml
+      AZURE_AI_SEARCH_ENDPOINT: ${AZURE_AI_SEARCH_ENDPOINT}
+      AZURE_AI_SEARCH_KEY: ${AZURE_AI_SEARCH_KEY}
+      AZURE_OPENAI_API_KEY: ${AZURE_OPENAI_API_KEY}
+      AZURE_OPENAI_DEPLOYMENT: ${AZURE_OPENAI_DEPLOYMENT}
+      AZURE_OPENAI_EM_DEPLOYMENT: ${AZURE_OPENAI_EM_DEPLOYMENT}
+      AZURE_OPENAI_ENDPOINT: ${AZURE_OPENAI_ENDPOINT}
+    restart: unless-stopped
+
+volumes:
+  postgresml_data:

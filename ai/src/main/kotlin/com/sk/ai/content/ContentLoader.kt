@@ -21,7 +21,7 @@ class ContentLoader(
         contentProcessors.forEach { processor ->
             logger.info("Loading content from processor: ${processor::class.simpleName}")
             val docs = processor.get()
-            logger.info("Found ${docs.size} processors docs")
+            logger.info("Found ${docs.size} doc(s) to process")
             count += docs.size
             vectorStore?.let { vs -> docs.forEach { vs.add(listOf(it)) } }
             logger.info("Content loaded from processor: ${processor::class.simpleName}")
