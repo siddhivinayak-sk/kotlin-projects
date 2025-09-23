@@ -131,7 +131,7 @@ vector:
 content:
   pdf:
     enabled: true
-    input-directory: C:/sandeep/work/trails/kotlin-projects/ai/input/pdf
+    input-directory: ./input/pdf
     pagesPerDocument: 1
     paragraph: false
     extensions: pdf
@@ -144,24 +144,24 @@ content:
 #        summaryTypes: CURRENT
   json:
     enabled: false
-    input-directory: C:/sandeep/work/trails/kotlin-projects/ai/input/json
+    input-directory: ./input/json
     txtField: description
     extensions: json
   txt:
     enabled: false
-    input-directory: C:/sandeep/work/trails/kotlin-projects/ai/input/txt
+    input-directory: ./input/txt
     extensions: txt
   html:
     enabled: false
-    input-directory: C:/sandeep/work/trails/kotlin-projects/ai/input/html
+    input-directory: ./input/html
     extensions: html
   md:
     enabled: false
-    input-directory: C:/sandeep/work/trails/kotlin-projects/ai/input/md
+    input-directory: ./input/md
     extensions: md
   tika:
     enabled: false
-    input-directory: C:/sandeep/work/trails/kotlin-projects/ai/input/tika
+    input-directory: ./input/tika
     extensions: pdf,doc,docx,ppt,pptx,xls,xlsx,odt,rtf,txt,html,html,md
 
 logging:
