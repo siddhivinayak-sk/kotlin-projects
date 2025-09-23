@@ -4,6 +4,12 @@ FROM openjdk:17-jdk-alpine
 # Set working directory
 WORKDIR /app
 
+# Create input directory
+RUN mkdir input
+
+# Copy input files
+COPY ./input input
+
 # Copy the jar file (update the name if needed)
 COPY ./build/libs/ai-0.0.1-SNAPSHOT.jar app.jar
 

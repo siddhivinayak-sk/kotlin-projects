@@ -4,6 +4,8 @@ import com.sk.ai.config.properties.ContentProperties
 import com.sk.ai.config.properties.filePathAsUrl
 import com.sk.ai.content.ContentProcessor
 import com.sk.ai.util.applyTransformation
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.ai.chat.model.ChatModel
 import org.springframework.ai.document.Document
 import org.springframework.ai.reader.jsoup.JsoupDocumentReader
@@ -18,6 +20,8 @@ class HtmlProcessor(
         private val chatModel: ChatModel,
 ): ContentProcessor {
 
+    val logger: Logger = LoggerFactory.getLogger(HtmlProcessor::class.java)
+
     private fun documentsFromFile(filePath: String): List<Document> {
         val config = JsoupDocumentReaderConfig.builder()
                 .selector("p") // Extract paragraphs within <article> tags
@@ -30,7 +34,9 @@ class HtmlProcessor(
     }
 
     override fun get(): List<Document> {
-        return contentProperties.html.filePathAsUrl().flatMap { apply(documentsFromFile(it)) }
+        val htmlFiles = contentProperties.html.filePathAsUrl()
+        logger.info("Found following files: $htmlFiles")
+        return htmlFiles.flatMap { apply(documentsFromFile(it)) }
     }
 
     override fun apply(t: List<Document>): List<Document> {
