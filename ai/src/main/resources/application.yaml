@@ -29,7 +29,7 @@ spring:
           completion: true
 # MCP Client Configuration
       client:
-        enabled: true
+        enabled: false
         name: my-mcp-client
         version: 1.0.0
         initialized: true
@@ -120,9 +120,9 @@ vector:
     embeddingDimension: 3072
   pg:
     enabled: true
-    url: jdbc:postgresql://localhost:5433/postgresml
-    username: postgresml
-    password: postgresml
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5433/postgresml}
+    username: ${SPRING_DATASOURCE_USERNAME:postgresml}
+    password: ${SPRING_DATASOURCE_PASSWORD:postgresml}
     #dimensions: 768 # distilbert-base-uncased
     #dimensions: 384 # all-MiniLM-L6-v2
     dimensions: 1024 # BAAI/bge-m3

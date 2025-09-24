@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  postgresml:
+    image: ghcr.io/postgresml/postgresml:2.10.0
+    restart: always
+    volumes:
+      # This volume persists your database data outside the container.
+      - postgresml_data:/var/lib/postgresql
+    ports:
+      # Map container port 5432 (Postgres) to host port 5433.
+      - "5433:5432"
+      # Map container port 8000 (HTTP API) to host port 8000.
+      - "8000:8000"
+    environment:
+      # This is the password for the default 'postgres' user.
+      - POSTGRES_PASSWORD=mysecretpassword
+      # This variable may be necessary to ensure the container stays running.
+      - PGML_NO_DASHBOARD=true
+    command: tail -f /dev/null
+
+volumes:
+  # Define the named volume for data persistence.
+  postgresml_data:

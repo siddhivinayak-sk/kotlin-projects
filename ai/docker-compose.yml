@@ -3,18 +3,21 @@ version: '3.8'
 services:
   postgresml:
     image: ghcr.io/postgresml/postgresml:2.10.0
-    container_name: postgresml
-    ports:
-      - "5433:5432"   # Postgres
-      - "8000:8000"   # ML API
+    restart: always
     volumes:
+      # This volume persists your database data outside the container.
       - postgresml_data:/var/lib/postgresql
-      - ./pg/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      # Map container port 5432 (Postgres) to host port 5433.
+      - "5433:5432"
+      # Map container port 8000 (HTTP API) to host port 8000.
+      - "8000:8000"
     environment:
-      POSTGRES_DB: postgresml
-      POSTGRES_USER: postgresml
-      POSTGRES_PASSWORD: postgresml
-    restart: unless-stopped
+      # This is the password for the default 'postgres' user.
+      - POSTGRES_PASSWORD=postgresml
+      # This variable may be necessary to ensure the container stays running.
+      - PGML_NO_DASHBOARD=true
+    command: tail -f /dev/null
 
   ai:
     build: .
