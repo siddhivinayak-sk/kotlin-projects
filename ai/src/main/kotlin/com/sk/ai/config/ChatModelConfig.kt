@@ -5,6 +5,7 @@ import com.azure.core.credential.AzureKeyCredential
 import com.sk.ai.advisor.CustomAdvisor
 import com.sk.ai.config.properties.ChatMemoryType
 import com.sk.ai.config.properties.ChatModelConfig
+import com.sk.ai.config.properties.ChatModelType.OLLAMA_LLM
 import com.sk.ai.config.properties.ChatModelType.OAI_GPT_4_1
 import com.sk.ai.config.properties.ContentProperties
 import com.sk.ai.config.properties.ModelProperties
@@ -23,6 +24,9 @@ import org.springframework.ai.chat.memory.InMemoryChatMemoryRepository
 import org.springframework.ai.chat.memory.MessageWindowChatMemory
 import org.springframework.ai.chat.model.ChatModel
 import org.springframework.ai.chat.prompt.ChatOptions
+import org.springframework.ai.ollama.OllamaChatModel
+import org.springframework.ai.ollama.api.OllamaApi
+import org.springframework.ai.ollama.api.OllamaOptions
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor
 import org.springframework.beans.factory.support.BeanDefinitionRegistry
 import org.springframework.beans.factory.support.GenericBeanDefinition
@@ -31,6 +35,9 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.annotation.Order
+import org.springframework.http.client.SimpleClientHttpRequestFactory
+import org.springframework.web.client.RestClient
+import org.springframework.web.reactive.function.client.WebClient
 import java.util.function.Supplier
 
 @Configuration(proxyBeanMethods = false)
@@ -88,12 +95,14 @@ class ChatModelConfig {
     private fun ChatModelConfig.chatModelOptions(): ChatOptions {
         return when (modelType) {
             OAI_GPT_4_1 -> azureChatModelOptions()
+            OLLAMA_LLM -> ollamaChatModelOptions()
         }
     }
 
     private fun ChatModelConfig.toChatModel(chatOptions: ChatOptions): ChatModel {
         return when (modelType) {
             OAI_GPT_4_1 -> createAzureOpenAiModel(chatOptions)
+            OLLAMA_LLM -> createOllamaModel(chatOptions)
         }
     }
 
@@ -110,6 +119,18 @@ class ChatModelConfig {
         }
     }
 
+    private fun ChatModelConfig.ollamaChatModelOptions(): ChatOptions {
+        return OllamaOptions.builder()
+                .topP(topP)
+                .temperature(temperature)
+                .presencePenalty(presencePenalty)
+                .frequencyPenalty(frequencyPenalty)
+                .model(modelName)
+                .topK(n)
+                .numCtx(maxTokens)
+                .build()
+    }
+
     private fun ChatModelConfig.createAzureOpenAiModel(chatOptions: ChatOptions): ChatModel {
         val oaiClientBuilder = OpenAIClientBuilder()
                 .credential(AzureKeyCredential(apiKey))
@@ -117,6 +138,24 @@ class ChatModelConfig {
         return AzureOpenAiChatModel.builder()
                 .defaultOptions(chatOptions as AzureOpenAiChatOptions)
                 .openAIClientBuilder(oaiClientBuilder)
+                .build()
+    }
+
+    private fun ChatModelConfig.createOllamaModel(chatOptions: ChatOptions): ChatModel {
+        val restClient = RestClient.builder().requestFactory(SimpleClientHttpRequestFactory()
+                                                                     .also {
+                                                                         it.setReadTimeout(0)
+                                                                         it.setConnectTimeout(0)
+                                                                     })
+        val webClient = WebClient.builder()
+        val ollamaApi = OllamaApi.builder()
+                .baseUrl(baseUrl)
+                .webClientBuilder(webClient)
+                .restClientBuilder(restClient)
+                .build()
+        return OllamaChatModel.builder()
+                .ollamaApi(ollamaApi)
+                .defaultOptions(chatOptions as OllamaOptions)
                 .build()
     }
 

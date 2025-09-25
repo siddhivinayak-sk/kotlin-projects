@@ -15,12 +15,12 @@ data class ChatModelConfig(
         val modelType: ChatModelType,
         val baseUrl: String,
         val modelName: String,
-        val apiKey: String,
+        val apiKey: String = "",
         val systemPrompt: String,
         val userPrompt: String,
         val maxTokens: Int,
         val temperature: Double,
-        val maxCompletionTokens: Int,
+        val maxCompletionTokens: Int = 0,
         val topP: Double,
         val frequencyPenalty: Double,
         val presencePenalty: Double,
@@ -28,7 +28,8 @@ data class ChatModelConfig(
 )
 
 enum class ChatModelType {
-    OAI_GPT_4_1
+    OAI_GPT_4_1,
+    OLLAMA_LLM,
 }
 
 enum class EmbeddingModelType {

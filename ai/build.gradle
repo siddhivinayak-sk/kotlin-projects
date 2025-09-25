@@ -22,6 +22,7 @@ repositories {
 ext {
 	set('springAiVersion', "1.0.1")
     set('postgresVersion', "42.7.4")
+    set('stanfordCorenlpVersion', "4.5.10")
 }
 
 dependencies {
@@ -36,6 +37,7 @@ dependencies {
     implementation 'org.springframework.ai:spring-ai-jsoup-document-reader'
     implementation 'org.springframework.ai:spring-ai-tika-document-reader'
     implementation 'org.springframework.ai:spring-ai-starter-model-chat-memory'
+    implementation "org.springframework.ai:spring-ai-ollama" //Ollama ChatModel
     implementation "org.springframework.ai:spring-ai-openai" //OpenAI ChatModel
     implementation "org.springframework.ai:spring-ai-azure-openai" //Azure OpenAI ChatModel Manual
     implementation "org.springframework.ai:spring-ai-azure-store" //Azure AI Search
@@ -46,6 +48,7 @@ dependencies {
     implementation 'org.springframework.ai:spring-ai-postgresml' //PostgresML EmbeddingModel
     implementation 'org.springframework.ai:spring-ai-pgvector-store' //PGVector
     runtimeOnly "org.postgresql:postgresql:${postgresVersion}" //PostgreSQL Driver
+    implementation "edu.stanford.nlp:stanford-corenlp:${stanfordCorenlpVersion}" //NLP in intent Util
 
 
     //implementation "org.springframework.ai:spring-ai-starter-model-azure-openai" //Azure OpenAI Starter

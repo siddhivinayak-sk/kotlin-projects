@@ -27,6 +27,9 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import reactor.core.publisher.Flux
+import com.sk.ai.controller.ChatController.QueryIntent.INFORMATIONAL
+import com.sk.ai.controller.ChatController.QueryIntent.CONVERSATIONAL
+import com.sk.ai.util.findStanfordNlpIntent
 
 @RequestMapping("/chat")
 @RestController
@@ -194,7 +197,7 @@ class ChatController(
         val advisors = mutableListOf<Advisor>(chatMemoryAdvisor)
         vectorStore?.let { vs ->
             queryIntent(body.query)?.let { intent ->
-                takeIf { intent == QueryIntent.INFORMATIONAL }?.let { advisors.add(vs.ragAdvisor()) }
+                takeIf { intent == INFORMATIONAL }?.let { advisors.add(vs.ragAdvisor()) }
             }
         }
         return QueryResponse(
@@ -208,9 +211,22 @@ class ChatController(
 
     enum class QueryIntent { CONVERSATIONAL, INFORMATIONAL }
     val intentChatClient = ChatClient.builder(chatModel).build()
+    val outputConverter = BeanOutputConverter(QueryIntent::class.java)
     private fun queryIntent(query: String): QueryIntent? {
-        val prompt = PromptTemplate("What is the intent of the following sentence: {sentence}? Classify either conversational or informational.")
-                        .create(mapOf("sentence" to query))
+        //return intentByFormatter(query)
+        return intentByOutputConverter(query)
+    }
+
+    private fun intentByFormatter(query: String): QueryIntent? {
+        val prompt = PromptTemplate("Classify '{sentence}' as either $CONVERSATIONAL or $INFORMATIONAL")
+                .create(mapOf("sentence" to query))
         return intentChatClient.prompt(prompt).call().entity(object : ParameterizedTypeReference<QueryIntent>() {})
+    }
+
+    private fun intentByOutputConverter(query: String): QueryIntent? {
+        val prompt = PromptTemplate("Classify '{sentence}' as either $CONVERSATIONAL or $INFORMATIONAL one word expected")
+                .create(mapOf("sentence" to query))
+        val intent = intentChatClient.prompt(prompt).call().content()?.uppercase()?.replace(Regex("[\r\n]"), "")
+        return runCatching { QueryIntent.valueOf(intent!!) }.getOrNull() ?: outputConverter.convert(intent ?: INFORMATIONAL.name)
     }
 }
