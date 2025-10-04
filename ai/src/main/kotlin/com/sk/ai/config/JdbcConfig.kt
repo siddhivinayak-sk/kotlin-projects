@@ -21,7 +21,7 @@ class JdbcConfig {
 
     @Bean
     @ConditionalOnProperty(prefix = "vector.pg", name = ["enabled"], havingValue = "true", matchIfMissing = false)
-    fun dataSource(vectorStoreProperties: VectorStoreProperties): DataSource {
+    fun pgDataSource(vectorStoreProperties: VectorStoreProperties): DataSource {
         val hikariConfig = HikariConfig()
         hikariConfig.jdbcUrl = vectorStoreProperties.pg.url
         hikariConfig.username = vectorStoreProperties.pg.username
@@ -44,11 +44,11 @@ class JdbcConfig {
 
     @Bean
     @ConditionalOnProperty(prefix = "vector.pg", name = ["enabled"], havingValue = "true", matchIfMissing = false)
-    fun jdbcTemplate(dataSource: DataSource) = JdbcTemplate(dataSource)
+    fun pgJdbcTemplate(dataSource: DataSource) = JdbcTemplate(dataSource)
 
     @Bean
     @ConditionalOnProperty(prefix = "vector.pg", name = ["enabled"], havingValue = "true", matchIfMissing = false)
-    fun initDb(dataSource: DataSource): DataSourceScriptDatabaseInitializer {
+    fun pgInitDb(dataSource: DataSource): DataSourceScriptDatabaseInitializer {
         val settings = DatabaseInitializationSettings()
         settings.schemaLocations = listOf("classpath:db/schema.sql")
         settings.mode = DatabaseInitializationMode.ALWAYS
