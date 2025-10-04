@@ -4,13 +4,13 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 
 @ConfigurationProperties(prefix = "app")
 data class ModelProperties(
-        val models: Map<String, ChatModelConfig> = emptyMap(),
+        val models: Map<String, ChatModelProperties> = emptyMap(),
         val embeddings: Map<String, EmbeddingModelConfig> = emptyMap(),
         val chatMemoryCount: Int = 10,
         val chatMemoryType: ChatMemoryType = ChatMemoryType.MESSAGE,
 )
 
-data class ChatModelConfig(
+data class ChatModelProperties(
         val enabled: Boolean,
         val modelType: ChatModelType,
         val baseUrl: String,
@@ -40,6 +40,7 @@ enum class EmbeddingModelType {
 enum class ChatMemoryType {
     MESSAGE,
     PROMPT,
+    VECTOR,
 }
 
 data class EmbeddingModelConfig(

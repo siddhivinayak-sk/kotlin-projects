@@ -1,13 +1,12 @@
 package com.sk.ai.content
 
+import com.sk.ai.config.properties.ContentProperties
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.ai.vectorstore.VectorStore
 import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.ApplicationListener
-import org.springframework.stereotype.Component
 
-@Component
 class ContentLoader(
         private val contentProcessors: List<ContentProcessor>,
         private val vectorStore: VectorStore?,

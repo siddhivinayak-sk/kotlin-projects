@@ -213,8 +213,8 @@ class ChatController(
     val intentChatClient = ChatClient.builder(chatModel).build()
     val outputConverter = BeanOutputConverter(QueryIntent::class.java)
     private fun queryIntent(query: String): QueryIntent? {
-        //return intentByFormatter(query)
-        return intentByOutputConverter(query)
+        return intentByFormatter(query)
+        //return intentByOutputConverter(query)
     }
 
     private fun intentByFormatter(query: String): QueryIntent? {
