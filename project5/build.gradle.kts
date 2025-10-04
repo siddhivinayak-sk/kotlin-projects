@@ -13,6 +13,7 @@ version = "1.0-SNAPSHOT"
 
 val mockkVersion: String by project
 val kluentVersion: String by project
+val bcVersion: String by project
 
 repositories {
     mavenCentral()
@@ -27,6 +28,11 @@ dependencies {
     implementation("com.fasterxml.jackson.core:jackson-databind:2.15.2")
     implementation("io.micrometer:context-propagation:latest.integration")
     implementation("org.apache.tika:tika-core:2.9.2")
+
+    implementation("org.bouncycastle:bcprov-jdk18on:$bcVersion")
+    implementation("org.bouncycastle:bcpkix-jdk18on:$bcVersion")
+    implementation("org.bouncycastle:bcutil-jdk18on:$bcVersion")
+    implementation("org.bouncycastle:bcpg-jdk18on:$bcVersion")
 
     testImplementation("io.projectreactor:reactor-test:3.4.19")
     testImplementation(kotlin("test"))
