@@ -203,11 +203,10 @@ class ChatController(
         return QueryResponse(
                 chatClient
                         .prompt()
-                        .toolContext(mapOf(ChatMemory.CONVERSATION_ID to request.session.id))
                         .user(body.query)
-                        .advisors(advisors)
                         .advisors { advisorSpec ->
                             advisorSpec.params(mapOf(ChatMemory.CONVERSATION_ID to request.session.id))
+                            advisorSpec.advisors(advisors)
                         }
                         .call().content()
         )
