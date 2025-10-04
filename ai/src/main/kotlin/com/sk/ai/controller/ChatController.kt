@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController
 import reactor.core.publisher.Flux
 import com.sk.ai.controller.ChatController.QueryIntent.INFORMATIONAL
 import com.sk.ai.controller.ChatController.QueryIntent.CONVERSATIONAL
-import com.sk.ai.util.findStanfordNlpIntent
+import jakarta.servlet.http.HttpServletRequest
 
 @RequestMapping("/chat")
 @RestController
@@ -193,7 +193,7 @@ class ChatController(
     data class QueryResponse(val response: String?)
 
     @PostMapping("/rag")
-    fun ragPost(@RequestBody body: QueryMessage): QueryResponse {
+    fun ragPost(@RequestBody body: QueryMessage, request: HttpServletRequest): QueryResponse {
         val advisors = mutableListOf<Advisor>(chatMemoryAdvisor)
         vectorStore?.let { vs ->
             queryIntent(body.query)?.let { intent ->
@@ -203,8 +203,12 @@ class ChatController(
         return QueryResponse(
                 chatClient
                         .prompt()
+                        .toolContext(mapOf(ChatMemory.CONVERSATION_ID to request.session.id))
                         .user(body.query)
                         .advisors(advisors)
+                        .advisors { advisorSpec ->
+                            advisorSpec.params(mapOf(ChatMemory.CONVERSATION_ID to request.session.id))
+                        }
                         .call().content()
         )
     }

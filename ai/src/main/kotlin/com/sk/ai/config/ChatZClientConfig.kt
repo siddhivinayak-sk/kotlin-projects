@@ -100,6 +100,6 @@ class ChatZClientConfig {
     }
 
     private fun advisors(chatMemoryAdvisor: BaseChatMemoryAdvisor): List<Advisor> {
-        return mutableListOf(SimpleLoggerAdvisor(), CustomAdvisor(), chatMemoryAdvisor)
+        return mutableListOf(SimpleLoggerAdvisor(), CustomAdvisor())
     }
 }
