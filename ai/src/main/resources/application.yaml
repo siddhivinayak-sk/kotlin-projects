@@ -148,13 +148,18 @@ content:
     pagesPerDocument: 1
     paragraph: false
     extensions: pdf
-#    transformers:
-#      splitter:
-#        defaultChunkSize: 1000
-#      keyword:
-#        keywordCount: 20
-#      summary:
-#        summaryTypes: CURRENT
+    transformers:
+      sanitizer:
+        enabled: true
+      splitter:
+        enabled: false
+        defaultChunkSize: 1000
+      keyword:
+        enabled: false
+        keywordCount: 20
+      summary:
+        enabled: false
+        summaryTypes: CURRENT
   json:
     enabled: false
     input-directory: ./input/json

@@ -25,6 +25,7 @@ data class ContentDetail(
 )
 
 data class TransformerConfig(
+        val enabled: Boolean = false,
         val defaultChunkSize: Int = 800,
         val minChunkSizeChars: Int = 350,
         val minChunkLengthToEmbed: Int = 5,
