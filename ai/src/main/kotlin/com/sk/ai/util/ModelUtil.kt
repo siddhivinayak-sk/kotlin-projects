@@ -112,6 +112,7 @@ fun ImageModelProperties.toAzureOpenAIDalleOptions(): ImageOptions {
             .height(height)
             .width(width)
             .model(modelName)
+            .deploymentName(modelName)
             .build()
 }
 

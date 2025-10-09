@@ -34,7 +34,7 @@ data class ImageModelProperties(
         val baseUrl: String = "",
         val apiKey: String = "",
         val modelName: String = "",
-        val n: Int = 3,
+        val n: Int = 1,
         val quality: String = "standard",
         val width: Int = 1024,
         val height: Int = 1024,
