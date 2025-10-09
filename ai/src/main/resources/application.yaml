@@ -61,6 +61,8 @@ spring:
 app:
   chat:
     enabled: true
+  image:
+    enabled: true
   chat-memory-count: 20
   chat-memory-type: PROMPT
   models:
@@ -108,6 +110,13 @@ app:
       transformer: BAAI/bge-m3
       kwargs:
         device: cpu
+  images:
+    dalle:
+      enabled: true
+      model-type: OAI_DALLE_3
+      base-url: ${AZURE_OPEN_AI_DALLE_ENDPOINT}
+      model-name: ${AZURE_OPEN_AI_DALLE_MODEL_NAME}
+      api-key: ${AZURE_OPEN_AI_DALLE_API_KEY}
 
 # Configure vector database
 vector:

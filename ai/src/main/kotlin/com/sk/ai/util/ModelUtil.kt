@@ -5,10 +5,16 @@ import com.azure.core.credential.AzureKeyCredential
 import com.sk.ai.config.properties.ChatModelProperties
 import com.sk.ai.config.properties.ChatModelType.OAI_GPT_4_1
 import com.sk.ai.config.properties.ChatModelType.OLLAMA_LLM
+import com.sk.ai.config.properties.ImageModelProperties
+import com.sk.ai.config.properties.ImageModelType.OAI_DALLE_3
 import org.springframework.ai.azure.openai.AzureOpenAiChatModel
 import org.springframework.ai.azure.openai.AzureOpenAiChatOptions
+import org.springframework.ai.azure.openai.AzureOpenAiImageModel
+import org.springframework.ai.azure.openai.AzureOpenAiImageOptions
 import org.springframework.ai.chat.model.ChatModel
 import org.springframework.ai.chat.prompt.ChatOptions
+import org.springframework.ai.image.ImageModel
+import org.springframework.ai.image.ImageOptions
 import org.springframework.ai.ollama.OllamaChatModel
 import org.springframework.ai.ollama.api.OllamaApi
 import org.springframework.ai.ollama.api.OllamaOptions
@@ -83,4 +89,36 @@ fun ChatModelProperties.createOllamaModel(chatOptions: ChatOptions): ChatModel {
             .ollamaApi(ollamaApi)
             .defaultOptions(chatOptions as OllamaOptions)
             .build()
+}
+
+fun ImageModelProperties.toImageModelOptions(): ImageOptions {
+    return when(modelType) {
+        OAI_DALLE_3 -> toAzureOpenAIDalleOptions()
+    }
+}
+
+fun ImageModelProperties.toImageModel(): ImageModel {
+    return when(modelType) {
+        OAI_DALLE_3 -> toOpenAIDalleModel()
+    }
+}
+
+fun ImageModelProperties.toAzureOpenAIDalleOptions(): ImageOptions {
+    return AzureOpenAiImageOptions.builder()
+            .N(n)
+            .responseFormat(responseFormat)
+            .user(user)
+            .style(style)
+            .height(height)
+            .width(width)
+            .model(modelName)
+            .build()
+}
+
+fun ImageModelProperties.toOpenAIDalleModel(): ImageModel {
+    val oaiClientBuilder = OpenAIClientBuilder()
+        .credential(AzureKeyCredential(apiKey))
+        .endpoint(baseUrl)
+        .buildClient()
+    return AzureOpenAiImageModel(oaiClientBuilder, toImageModelOptions() as AzureOpenAiImageOptions)
 }
