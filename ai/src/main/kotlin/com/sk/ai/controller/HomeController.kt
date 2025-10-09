@@ -12,4 +12,9 @@ class HomeController {
     fun home(): String {
         return "redirect:/resources/index.html"
     }
+
+    @GetMapping("/images")
+    fun images(): String {
+        return "redirect:/resources/images.html"
+    }
 }
