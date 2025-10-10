@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Image Generator</title>
+    <style>
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            overflow-x: hidden;
+        }
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #181a20;
+            color: #e2e8f0;
+        }
+        .container {
+            min-height: 90vh;
+            width: 100vw;
+            max-width: 100vw;
+            margin: 0;
+            background: #23272f;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+            border-radius: 0;
+            padding: 0 0 24px 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+        @media (min-width: 700px) {
+            .container {
+                max-width: 100vw;
+                width: 100vw;
+                min-height: 90vh;
+                margin: 0;
+                box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+                border-radius: 12px;
+                padding: 32px 24px 24px 24px;
+            }
+        }
+        h1 {
+            text-align: center;
+            color: #e2e8f0;
+            margin-bottom: 24px;
+        }
+        .input-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+        #promptInput {
+            /* Removed flex: 1 to allow width control in media query */
+            min-width: 85%;
+            padding: 12px;
+            font-size: 1.1em;
+            border: 1px solid #3b4252;
+            border-radius: 8px;
+            outline: none;
+            background: #23272f;
+            color: #e2e8f0;
+            transition: border 0.2s;
+        }
+        #promptInput:focus {
+            border-color: #4f8cff;
+        }
+        #sendBtn, #clearBtn {
+            padding: 8px;
+            font-size: 1em;
+            border: none;
+            border-radius: 8px;
+            background: transparent;
+            color: inherit;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #sendBtn svg {
+            fill: #4f8cff;
+        }
+        #clearBtn svg {
+            fill: #e53e3e;
+        }
+        #sendBtn:hover {
+            background: #23272f;
+        }
+        #clearBtn:hover {
+            background: #23272f;
+        }
+        .images-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+            background: #23272f;
+        }
+        .images-table th, .images-table td {
+            padding: 12px;
+            border-bottom: 1px solid #2d313a;
+            text-align: left;
+            vertical-align: top;
+        }
+        .images-table th {
+            background: #23272f;
+            color: #a0aec0;
+        }
+        .image-cell img {
+            max-width: 220px;
+            max-height: 220px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+            background: #181a20;
+        }
+        .metadata-cell {
+            font-size: 0.98em;
+            color: #e2e8f0;
+            background: #23272f;
+            border-radius: 6px;
+            padding: 10px;
+            position: relative;
+        }
+        .metadata-cell button {
+            position: absolute;
+            right: 8px;
+            bottom: 8px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            z-index: 2;
+        }
+        .metadata-cell button svg {
+            fill: #4f8cff;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0; top: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(24,26,32,0.92);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal.active {
+            display: flex;
+        }
+        .modal-content {
+            background: #23272f;
+            border-radius: 10px;
+            padding: 24px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.28);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 0;
+            width: 96vw;
+            max-width: 900px;
+            max-height: 96vh;
+            overflow: hidden;
+            color: #e2e8f0;
+        }
+        .modal-image-wrapper {
+            width: 100%;
+            height: 70vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: auto;
+            background: #181a20;
+            border-radius: 8px;
+            margin-bottom: 18px;
+        }
+        .modal-image {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 8px;
+            transition: transform 0.2s;
+            display: block;
+            margin: auto;
+            background: #181a20;
+        }
+        .modal-controls {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 8px;
+        }
+        .modal-controls button {
+            padding: 8px 16px;
+            font-size: 1em;
+            border: none;
+            border-radius: 6px;
+            background: #4f8cff;
+            color: #fff;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .modal-controls button:hover {
+            background: #2563eb;
+        }
+        .modal-close {
+            position: absolute;
+            top: 12px;
+            right: 18px;
+            font-size: 1.8em;
+            color: #e2e8f0;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        #errorMsg {
+            color: #e53e3e;
+            background: #2d313a;
+            border: 1px solid #c53030;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+        @media (max-width: 700px) {
+            .container {
+                padding: 12px 4px;
+            }
+            .input-row {
+                flex-direction: row;
+                gap: 4px;
+                width: 100vw;
+                max-width: 100vw;
+                flex-wrap: nowrap;
+                overflow: hidden;
+            }
+            #promptInput {
+                width: 60vw;
+                max-width: 85vw;
+                min-width: 60vw !important;
+                box-sizing: border-box;
+            }
+            #sendBtn, #clearBtn {
+                width: 20vw;
+                max-width: 20vw;
+                min-width: 48px;
+                margin-top: 0;
+                justify-content: center;
+                box-sizing: border-box;
+            }
+            .images-table th, .images-table td {
+                padding: 8px;
+            }
+            .image-cell img {
+                max-width: 120px;
+                max-height: 120px;
+            }
+            .modal-content {
+                width: 98vw;
+                max-width: 98vw;
+                padding: 8px;
+            }
+            .modal-image-wrapper {
+                height: 50vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AI Image Generator</h1>
+        <div id="errorMsg" style="display:none;color:#e53e3e;background:#fff5f5;border:1px solid #feb2b2;padding:10px;border-radius:8px;margin-bottom:16px;text-align:center;"></div>
+        <div class="input-row">
+            <input type="text" id="promptInput" placeholder="Enter prompt for image generation..." />
+            <button id="sendBtn" title="Send" aria-label="Send">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#4f8cff" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+            </button>
+            <button id="clearBtn" title="Clear" aria-label="Clear">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#e53e3e" viewBox="0 0 24 24"><path d="M18.3 5.71a1 1 0 0 0-1.41 0L12 10.59 7.11 5.7A1 1 0 0 0 5.7 7.11l4.89 4.89-4.89 4.89a1 1 0 1 0 1.41 1.41l4.89-4.89 4.89 4.89a1 1 0 0 0 1.41-1.41l-4.89-4.89 4.89-4.89a1 1 0 0 0 0-1.41z"/></svg>
+            </button>
+        </div>
+        <table class="images-table" id="imagesTable">
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Details</th>
+                </tr>
+            </thead>
+            <tbody id="imagesBody">
+                <!-- Images will be rendered here -->
+            </tbody>
+        </table>
+    </div>
+    <div class="modal" id="imageModal">
+        <div class="modal-content">
+            <button class="modal-close" id="modalCloseBtn" title="Close">&times;</button>
+            <div class="modal-image-wrapper">
+                <img id="modalImage" class="modal-image" src="" alt="Large Image" />
+            </div>
+            <div class="modal-controls">
+                <button id="zoomInBtn">Zoom In</button>
+                <button id="zoomOutBtn">Zoom Out</button>
+                <button id="downloadBtn">Download</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        const promptInput = document.getElementById('promptInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const imagesBody = document.getElementById('imagesBody');
+        // Store original send button HTML for restoration
+        const sendBtnOriginalHTML = sendBtn.innerHTML;
+
+        function renderImageRow(b64Json, metadata) {
+            const tr = document.createElement('tr');
+            const imgTd = document.createElement('td');
+            imgTd.className = 'image-cell';
+            if (b64Json) {
+                const img = document.createElement('img');
+                img.src = 'data:image/png;base64,' + b64Json;
+                img.alt = metadata.revisedPrompt || 'Generated Image';
+                img.style.cursor = 'pointer';
+                img.addEventListener('click', function() {
+                    openModal(img.src);
+                });
+                imgTd.appendChild(img);
+            } else {
+                imgTd.textContent = 'No image';
+            }
+            const metaTd = document.createElement('td');
+            metaTd.className = 'metadata-cell';
+            metaTd.style.position = 'relative';
+            metaTd.innerHTML = `<strong>Prompt:</strong> ${metadata.revisedPrompt || ''}<br>` +
+                `<strong>Created:</strong> ${metadata.created ? new Date(metadata.created * 1000).toLocaleString() : ''}`;
+            // Add download icon at bottom right
+            if (b64Json) {
+                const downloadBtn = document.createElement('button');
+                downloadBtn.title = 'Download Image';
+                downloadBtn.style.position = 'absolute';
+                downloadBtn.style.right = '8px';
+                downloadBtn.style.bottom = '8px';
+                downloadBtn.style.background = 'none';
+                downloadBtn.style.border = 'none';
+                downloadBtn.style.cursor = 'pointer';
+                downloadBtn.style.padding = '4px';
+                downloadBtn.style.zIndex = '2';
+                downloadBtn.innerHTML = `<svg xmlns='http://www.w3.org/2000/svg' height='22' width='22' viewBox='0 0 24 24' fill='#3182ce'><path d='M5 20q-.825 0-1.413-.588Q3 18.825 3 18v-2q0-.425.288-.713Q3.575 15 4 15t.713.287Q5 15.575 5 16v2h14v-2q0-.425.288-.713Q19.575 15 20 15t.713.287Q21 15.575 21 16v2q0 .825-.588 1.412Q19.825 20 19 20Zm7-5.6q-.2 0-.375-.075t-.325-.225l-3.3-3.3q-.275-.275-.275-.7 0-.425.275-.7.275-.275.7-.275.425 0 .7.275l1.1 1.1V5q0-.425.288-.713Q12.575 4 13 4t.713.287Q14 4.575 14 5v6.5l1.1-1.1q.275-.275.7-.275.425 0 .7.275.275.275.275.7 0 .425-.275.7l-3.3 3.3q-.15.15-.325.225-.175.075-.375.075Z'/></svg>`;
+                downloadBtn.onclick = function() {
+                    const a = document.createElement('a');
+                    a.href = 'data:image/png;base64,' + b64Json;
+                    a.download = 'generated-image.png';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                };
+                metaTd.appendChild(downloadBtn);
+            }
+            tr.appendChild(imgTd);
+            tr.appendChild(metaTd);
+            imagesBody.appendChild(tr);
+        }
+
+        function showError(msg) {
+            const errorMsg = document.getElementById('errorMsg');
+            errorMsg.textContent = msg;
+            errorMsg.style.display = 'block';
+        }
+        function clearError() {
+            const errorMsg = document.getElementById('errorMsg');
+            errorMsg.textContent = '';
+            errorMsg.style.display = 'none';
+        }
+
+        function clearImages() {
+            imagesBody.innerHTML = '';
+            promptInput.value = '';
+            clearError();
+        }
+
+        function handleResponse(data) {
+            clearError();
+            // Main result
+            if (data.result && data.result.output && data.result.output.b64Json) {
+                renderImageRow(data.result.output.b64Json, {
+                    revisedPrompt: data.result.metadata?.revisedPrompt,
+                    created: data.metadata?.created,
+                    rawMap: data.metadata?.rawMap
+                });
+            }
+            // Additional results
+            if (Array.isArray(data.results)) {
+                data.results.forEach(res => {
+                    if (res.output && res.output.b64Json) {
+                        renderImageRow(res.output.b64Json, {
+                            revisedPrompt: res.metadata?.revisedPrompt,
+                            created: data.metadata?.created,
+                            rawMap: data.metadata?.rawMap
+                        });
+                    }
+                });
+            }
+        }
+
+        function sendPrompt() {
+            const prompt = promptInput.value.trim();
+            if (!prompt) {
+                promptInput.focus();
+                showError('Please enter a prompt to generate an image.');
+                return;
+            }
+            clearError();
+            sendBtn.disabled = true;
+            sendBtn.innerHTML = 'Loading...';
+            fetch(`/images/generate?prompt=${encodeURIComponent(prompt)}`)
+                .then(res => {
+                    if (!res.ok) throw new Error('Failed to generate image. Server returned ' + res.status);
+                    return res.json();
+                })
+                .then(data => {
+                    if (!data || (!data.result && !data.results)) {
+                        showError('No image data found in response.');
+                        return;
+                    }
+                    handleResponse(data);
+                })
+                .catch(err => {
+                    showError('Error: ' + err.message);
+                })
+                .finally(() => {
+                    sendBtn.disabled = false;
+                    sendBtn.innerHTML = sendBtnOriginalHTML;
+                });
+        }
+
+        // Modal logic
+        const imageModal = document.getElementById('imageModal');
+        const modalImage = document.getElementById('modalImage');
+        const modalCloseBtn = document.getElementById('modalCloseBtn');
+        const zoomInBtn = document.getElementById('zoomInBtn');
+        const zoomOutBtn = document.getElementById('zoomOutBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+        let currentScale = 1;
+        const MAX_SCALE = 2.5;
+        const MIN_SCALE = 0.5;
+        function openModal(imgSrc) {
+            modalImage.src = imgSrc;
+            currentScale = 1;
+            modalImage.style.transform = 'scale(1)';
+            imageModal.classList.add('active');
+            setTimeout(() => {
+                centerModalImage();
+            }, 100);
+        }
+        function closeModal() {
+            imageModal.classList.remove('active');
+            modalImage.src = '';
+        }
+        modalCloseBtn.addEventListener('click', closeModal);
+        document.addEventListener('keydown', function(e) {
+            if (imageModal.classList.contains('active') && (e.key === 'Escape' || e.key === 'Esc')) {
+                closeModal();
+            }
+        });
+        imageModal.addEventListener('click', function(e) {
+            if (e.target === imageModal) closeModal();
+        });
+        function centerModalImage() {
+            const wrapper = document.querySelector('.modal-image-wrapper');
+            const img = document.getElementById('modalImage');
+            if (!img) return;
+            // Center the image based on its scaled size
+            setTimeout(() => {
+                const imgRect = img.getBoundingClientRect();
+                const wrapperRect = wrapper.getBoundingClientRect();
+                // Calculate scroll so that the center of the image is in the center of the wrapper
+                const scrollTop = (img.offsetHeight * currentScale - wrapper.clientHeight) / 2;
+                const scrollLeft = (img.offsetWidth * currentScale - wrapper.clientWidth) / 2;
+                wrapper.scrollTop = Math.max(0, scrollTop);
+                wrapper.scrollLeft = Math.max(0, scrollLeft);
+            }, 100);
+        }
+        zoomInBtn.addEventListener('click', function() {
+            if (currentScale < MAX_SCALE) {
+                currentScale = Math.min(currentScale + 0.2, MAX_SCALE);
+                modalImage.style.transform = 'scale(' + currentScale + ')';
+                centerModalImage();
+            }
+        });
+        zoomOutBtn.addEventListener('click', function() {
+            if (currentScale > MIN_SCALE) {
+                currentScale = Math.max(currentScale - 0.2, MIN_SCALE);
+                modalImage.style.transform = 'scale(' + currentScale + ')';
+                centerModalImage();
+            }
+        });
+        downloadBtn.addEventListener('click', function() {
+            const a = document.createElement('a');
+            a.href = modalImage.src;
+            a.download = 'generated-image.png';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        });
+
+        sendBtn.addEventListener('click', sendPrompt);
+        promptInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                sendPrompt();
+            }
+        });
+        clearBtn.addEventListener('click', clearImages);
+    </script>
+</body>
+</html>
