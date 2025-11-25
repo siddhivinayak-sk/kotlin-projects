@@ -1,7 +1,8 @@
-//import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    kotlin("jvm") version "2.3.0-Beta1"
+    kotlin("jvm") version "2.3.0-RC"
     application
     idea
     eclipse
@@ -116,11 +117,13 @@ tasks.test {
 }
 
 //tasks.withType<KotlinCompile> {
-//    kotlinOptions.jvmTarget = "1.8"
+//    compilerOptions {
+//        jvmTarget.set(JvmTarget.JVM_25)
+//    }
 //}
 
 application {
-    mainClass.set("MainKt")
+    mainClass.set("com.sk.ktl.entropy.ShannonEntropyKt")
 }
 
 tasks.withType<JavaExec> {
