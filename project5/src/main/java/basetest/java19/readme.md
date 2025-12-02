@@ -1,0 +1,10 @@
+- Pattern Matching for switch (Third Preview)
+- Record Patterns (Preview)
+- Virtual Threads (Preview) 
+- Structured Concurrency (Incubator)
+- Foreign Function & Memory API (Preview) 
+- Vector API (Fourth Incubator)
+- Deprecation of Locale class constructors
+- java.lang.ThreadGroup is degraded
+- Automatic Generation of the CDS Archive
+- Linux/RISC-V Port

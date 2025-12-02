@@ -1,0 +1,13 @@
+- Running Java files (no need to run javac)
+- Performance improvements
+- New constant-pool from named CONSTANT_Dynamic
+- Improved AArch64 Intrinsics
+- A NoOp Garbage Collector for Performance testing, Memory pressure testing, VM interface testing, Extremely short-lived jobs
+- Java Flight Recorder is open-source
+- Deprecated Java EE and CORBA modules
+- No JavaMissionControl in JDK
+- Deprecated Nashorn and pack200 compression scheme
+- ChaCha20 and Poly1305 cryptographic algorithms
+- TLS 1.3 support
+- ZGC (Z Garbage Collector) is introduced as an experimental feature
+- Support for Unicode 10

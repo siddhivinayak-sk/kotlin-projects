@@ -1,0 +1,5 @@
+- Hidden Classes - The goal of hidden classes is to allow the runtime creation of classes that are not discoverable
+- Pattern Matching Type Checks
+- Foreign Memory API (Incubator)
+- Sealed Interfaces
+- Finalize ZGC (JEP 377) and Shenandoah (JEP 379)

@@ -1,0 +1,3 @@
+- Shenandoah: A Low-Pause-Time Garbage Collector
+- Microbenchmark Suite
+- Default Class Data Sharing (CDS) Archives - Helps improve startup time and reduce memory footprint by sharing common class metadata across multiple Java Virtual Machine (JVM) instances.

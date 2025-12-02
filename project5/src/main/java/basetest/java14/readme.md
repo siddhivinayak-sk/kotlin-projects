@@ -1,0 +1,10 @@
+- Final switch case expression feature
+- Final text block feature
+- Preview instanceof pattern matching feature
+- Preview records feature
+- NullPointerExceptions improvements - more details in stack traces
+- Foreign-memory-access API (Incubator)
+- Package tool for native platform like windows, linux, macos
+- ZGC on MacOS
+- NUMA-Aware Memory Allocation for G1
+- JFR Event Streaming

@@ -1,0 +1,18 @@
+- The default floating-point operations are strict or strictfp, both of which guarantee the same results from the floating-point calculations on every platform
+- Enhanced Pseudo-Random Number Generators
+- New macOS Rendering Pipeline
+- macOS/AArch64 Port 
+- Deprecate the Applet API for Removal 
+- Strongly Encapsulate JDK Internals - This feature will prevent JDK users from accessing internal APIs, except for critical ones like sun.misc.Unsafe.
+- Pattern matching for switch (Preview)
+- Remove RMI Activation API
+- Finalized Sealed Classes
+- Remove the Experimental AOT and JIT Compiler
+- Deprecate the Security Manager for Removal
+- Foreign Function and Memory API (Incubator)
+- Vector API (Second Incubator)
+- Context-Specific Deserialization Filters
+- LTS Definition
+- Six-Month Feature-Release Model
+- LTS Model
+- New Release Process

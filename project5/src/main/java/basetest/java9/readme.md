@@ -1,0 +1,18 @@
+Other features:
+- Module system (Project Jigsaw)
+- Improved Javadoc with search functionality
+- Enhanced Process API
+- HTTP/2 Client (incubating)
+- Multi-release JAR files
+- Private methods in interfaces
+- Stream API enhancements
+- Diamond operator with anonymous classes
+- Improved type inference
+- Compact Strings
+- Unified JVM logging
+- Variable handles (VarHandles)
+- Enhanced deprecation mechanism
+- Improved security features
+- Ahead-of-Time (AOT) compilation (experimental)
+- Improved garbage collection options
+- Jshell and jcmd tool enhancements

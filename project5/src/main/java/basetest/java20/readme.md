@@ -1,0 +1,7 @@
+- Scoped Values
+- Record Patterns
+- Pattern Matching for Switch
+- Foreign Function and Memory API
+- Virtual Threads
+- Structured Concurrency
+- Vector API

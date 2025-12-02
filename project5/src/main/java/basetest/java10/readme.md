@@ -1,0 +1,6 @@
+- Container Awareness - Extract container specific information such as CPU and memory limits.
+- Performance improvements - Various performance enhancements and optimizations.
+- Root Certificate - Oracle open-source root certificate 
+- javah removed
+- java.security.{Certificate,Identity,IdentityScope,Signer} marked for removal
+- Time based release versioning - 6 month time based release versioning, LTS versions every 3 years.
