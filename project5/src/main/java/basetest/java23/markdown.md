@@ -1,0 +1,19 @@
+- Markdown support for java doc
+- Module import statements
+- Primitive types in Pattern matching and Switch case
+- Stream Gatherers (Preview)
+- Implicitly Declared Classes and Instance Main Methods (Preview)
+- Structured Concurrency (Preview)
+- Scoped Values (Preview)
+- Flexible Constructor Bodies (Preview)
+- Class-File API (Preview)
+- Vector API (Incubator)
+- Deprecate the Memory-Access Methods in sun.misc.Unsafe for Removal 
+- Thread.suspend/resume and ThreadGroup.suspend/resume are Removed
+- ThreadGroup.stop is Removed
+- ZGC: Generational Mode by Default
+- Annotation processing in javac disabled by default
+- Removal of Module jdk.random
+- Console Methods With Explicit Locale
+- Support for Duration Until Another Instant
+- Relax alignment of array elements

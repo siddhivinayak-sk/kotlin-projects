@@ -1,0 +1,18 @@
+- Primitive Types in Patterns (Preview)
+- Module Import Declarations (Preview)
+- Finalization - Compact Source Files (JEP 512) and Instance Main Methods
+- Finalization - Flexible Constructor Bodies
+- Finalization - Scoped Values - ThreadLocal alternative to Virtual Threads
+- Structured Concurrency (Preview)
+- Stable Value API - Context stable immutable values (across threads or computations)
+- PEM Encodings of Cryptographic Objects (Preview)
+- Vector API (Incubator)
+- Finalization - Key Derivation Function API
+- Remove the 32-bit x86 Port
+- JFR CPU-Time Profiling (Experimental)
+- Finalization - Ahead-of-Time Command-Line Ergonomics (-XX:AOTCacheOutput=<file>)
+- Finalization - Ahead-of-Time Method Profiling
+- Finalization - JFR Cooperative Sampling
+- Finalization - Compact Object Headers
+- Finalization - JFR Method Timing and Tracing
+- Finalization - Generational Shenandoah

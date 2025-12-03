@@ -59,10 +59,20 @@ public class LanguageFeatureTest {
         return result;
     }
 
-    static void stringTemplateExample() {
-        // String templates
-        String name = "Baeldung";
-        String welcomeText = STR."Welcome to \{name}"; // String template example, STR. should be prefixed as it is template processor
-        System.out.println(welcomeText);
+//    static void stringTemplateExample() {
+//        // String templates
+//        String name = "Baeldung";
+//        String welcomeText = STR."Welcome to \{name}"; // String template example, STR. should be prefixed as it is template processor
+//        System.out.println(welcomeText);
+//    }
+
+    // Switch expression with 'when' guards
+    static void switchExpressionWithWhen() {
+        Object obj = "HelloWorld";
+        switch (obj) {
+            case String s when s.length() >= 5 -> System.out.println(s.toUpperCase());
+            case Integer i                     -> System.out.println(i * i);
+            case null, default                 -> System.out.println(obj);
+        }
     }
 }

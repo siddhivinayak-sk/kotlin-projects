@@ -1,0 +1,12 @@
+- Primitive Types in Patterns, instanceof, and switch (Preview)
+- Flexible Constructor Bodies (Preview)
+- Module Import Declarations (Preview)
+- Finalized Stream Gatherers
+- Simple Source Files and Instance Main Methods (Preview)
+- Class-File API (Preview)
+- Scoped Values (Preview)
+- Vector API (Preview)
+- Structured Concurrency (Preview)
+- Key Derivation Function API (Preview)
+- Quantum-Resistant Module-Lattice-Based Key Encapsulation Mechanism (QR ML-KEM) (Preview)
+- Quantum-Resistant Module-Lattice-Based Digital Signature Algorithm (QR ML-DSA) (Preview)
