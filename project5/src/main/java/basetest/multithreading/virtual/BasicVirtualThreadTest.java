@@ -3,6 +3,7 @@ package basetest.multithreading.virtual;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.ThreadFactory;
 
 /**
  * Virtual Thread (VT) is a new feature in Java 17. It is a lightweight thread that is managed by the JVM (instead of OS
@@ -47,6 +48,20 @@ public class BasicVirtualThreadTest {
             Future<?> future = executorService.submit(task1);
             System.out.println(future.get());
         }
+
+        // Another example of thread builder
+        Runnable printThread = () -> System.out.println(Thread.currentThread());
+        ThreadFactory virtualThreadFactory = Thread.ofVirtual().factory();
+        ThreadFactory kernelThreadFactory = Thread.ofPlatform().factory();
+        Thread virtualThread = virtualThreadFactory.newThread(printThread);
+        Thread kernelThread = kernelThreadFactory.newThread(printThread);
+        virtualThread.start();
+        kernelThread.start();
+
+        // A virtual thread cannot be unmounted during blocking operations when it is pinned to its carrier.
+        // 1. When virtual thread runs synchronized block or method
+        // 2. When virtual thread runs a native method (Foreign Function & Memory API)
+
 
     }
 

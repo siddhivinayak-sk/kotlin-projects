@@ -123,7 +123,20 @@ tasks.test {
 //}
 
 application {
-    mainClass.set("com.sk.ktl.entropy.ShannonEntropyKt")
+    mainClass.set("com.sk.ktl.nimbus.TokenToolKt")
+}
+
+tasks.withType<JavaCompile>().configureEach {
+    options.compilerArgs.add("--enable-preview")
+    options.compilerArgs.add("-Xlint:deprecation")
+    options.compilerArgs.add("-Xlint:preview")
+    options.release.set(25)
+}
+
+tasks.withType<KotlinCompile>().configureEach {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_25)
+    }
 }
 
 tasks.withType<JavaExec> {
