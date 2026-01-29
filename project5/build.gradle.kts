@@ -64,6 +64,8 @@ dependencies {
     implementation("me.gosimple:nbvcxz:${nbvcxzVersion}")
     implementation("org.passay:passay:${passayVersion}")
     implementation("org.apache.pdfbox:pdfbox:${pdfboxVersion}")
+    implementation("org.apache.pdfbox:pdfbox-tools:${pdfboxVersion}")
+    implementation("org.apache.pdfbox:pdfbox-app:${pdfboxVersion}")
     implementation("org.apache.poi:poi:${poiVersion}")
     implementation("org.apache.poi:poi-ooxml:${poiVersion}")
     implementation("org.apache.poi:poi-scratchpad:${poiVersion}")
@@ -99,6 +101,7 @@ dependencies {
     implementation("software.amazon.awssdk:bom:${awssdkbomVersion}")
     implementation("software.amazon.awssdk:s3:${awssdkbomVersion}")
     implementation("org.apache.logging.log4j:log4j-core:${apacheLog4jCoreVersion}")
+    implementation("org.apache.logging.log4j:log4j-api:${apacheLog4jCoreVersion}")
     implementation("javax.servlet:servlet-api:${javaxServletApiVersion}")
 
     testImplementation("io.projectreactor:reactor-test:3.4.19")
@@ -123,7 +126,12 @@ tasks.test {
 //}
 
 application {
-    mainClass.set("com.sk.ktl.nimbus.TokenToolKt")
+    val mainClassName = if(project.hasProperty("mainClass"))
+        project.property("mainClass").toString()
+    else
+        "com.sk.ktl.nimbus.TokenToolKt"
+    mainClass.set(mainClassName)
+    //command-line: .\gradlew run -P mainClass=pdfboxtest.PDFBoxTest
 }
 
 tasks.withType<JavaCompile>().configureEach {
