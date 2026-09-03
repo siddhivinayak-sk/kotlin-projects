@@ -1,15 +1,16 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-	id("org.springframework.boot") version "3.2.2"
-	id("io.spring.dependency-management") version "1.1.4"
-	kotlin("jvm") version "1.9.22"
-	kotlin("plugin.spring") version "1.9.22"
+	id("org.springframework.boot") version "3.5.16"
+	id("io.spring.dependency-management") version "1.1.7"
+	kotlin("jvm") version "2.4.10"
+	kotlin("plugin.spring") version "2.4.10"
 }
 
 group = "com.sk"
 version = "0.0.1-SNAPSHOT"
-val springAiVersion = "0.8.0-SNAPSHOT"
+val springAiVersion = "1.0.9"
 
 java {
 	toolchain {
@@ -19,8 +20,6 @@ java {
 
 repositories {
 	mavenCentral()
-    maven ( url = "https://repo.spring.io/milestone" )
-    maven ( url = "https://repo.spring.io/snapshot" )
 }
 
 dependencies {
@@ -31,17 +30,16 @@ dependencies {
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
 
     implementation(platform("org.springframework.ai:spring-ai-bom:$springAiVersion"))
-    implementation("org.springframework.ai:spring-ai-ollama:$springAiVersion")
-    implementation("org.springframework.ai:spring-ai-ollama-spring-boot-starter:$springAiVersion")
+    implementation("org.springframework.ai:spring-ai-starter-model-ollama:$springAiVersion")
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("io.projectreactor:reactor-test")
 }
 
 tasks.withType<KotlinCompile> {
-	kotlinOptions {
-		freeCompilerArgs += "-Xjsr305=strict"
-		jvmTarget = "17"
+	compilerOptions {
+		freeCompilerArgs.add("-Xjsr305=strict")
+		jvmTarget.set(JvmTarget.JVM_25)
 	}
 }
 

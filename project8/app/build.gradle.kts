@@ -1,5 +1,5 @@
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "1.9.25"
+    id("org.jetbrains.kotlin.jvm") version "2.4.10"
     application
 }
 
@@ -18,12 +18,12 @@ repositories {
 dependencies {
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    implementation("com.google.guava:guava:30.1.1-jre")
-    implementation("com.google.auto.service:auto-service:1.0")
-    testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
-    testImplementation("org.junit.jupiter:junit-jupiter-params:5.8.2")
-    testImplementation("org.assertj:assertj-core:3.22.0")
-    testImplementation("com.github.tschuchortdev:kotlin-compile-testing:1.4.8")
+    implementation("com.google.guava:guava:33.7.1-jre")
+    implementation("com.google.auto.service:auto-service:1.1.1")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.14.4")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:5.14.4")
+    testImplementation("org.assertj:assertj-core:3.27.7")
+    testImplementation("com.github.tschuchortdev:kotlin-compile-testing:1.6.0")
 }
 
 testing {

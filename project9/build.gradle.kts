@@ -1,10 +1,11 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-	id("org.springframework.boot") version "2.7.3"
-	id("io.spring.dependency-management") version "1.0.13.RELEASE"
-	kotlin("jvm") version "1.6.21"
-	kotlin("plugin.spring") version "1.6.21"
+	id("org.springframework.boot") version "3.5.16"
+	id("io.spring.dependency-management") version "1.1.7"
+	kotlin("jvm") version "2.4.10"
+	kotlin("plugin.spring") version "2.4.10"
 }
 
 group = "com.sk"
@@ -39,11 +40,10 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-activemq")
 	//implementation("org.apache.kafka:kafka-streams")
 	//implementation("org.springframework.kafka:spring-kafka")
-	implementation("org.reactivestreams:reactive-streams:1.0.4")
+	implementation("org.reactivestreams:reactive-streams")
 	//implementation("io.netty:netty-all:4.0.9.Final")
-	implementation("io.projectreactor:reactor-core:3.4.22")
-	implementation("io.projectreactor.netty:reactor-netty:1.0.19")
-	//implementation("io.projectreactor:reactor-core:3.4.22")
+	implementation("io.projectreactor:reactor-core")
+	implementation("io.projectreactor.netty:reactor-netty")
 
 	implementation("org.webjars:webjars-locator-core")
 	implementation("org.webjars:sockjs-client:1.1.1")
@@ -57,9 +57,9 @@ dependencies {
 }
 
 tasks.withType<KotlinCompile> {
-	kotlinOptions {
-		freeCompilerArgs = listOf("-Xjsr305=strict")
-		jvmTarget = "11"
+	compilerOptions {
+		freeCompilerArgs.set(listOf("-Xjsr305=strict"))
+		jvmTarget.set(JvmTarget.JVM_25)
 	}
 }
 

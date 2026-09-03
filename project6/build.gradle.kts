@@ -1,20 +1,18 @@
 import org.asciidoctor.gradle.jvm.AsciidoctorTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.jetbrains.kotlin.incremental.withSubtypes
-import java.util.HashMap
-import java.util.Map
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-	id("org.springframework.boot") version "2.6.8"
-	id("io.spring.dependency-management") version "1.0.11.RELEASE"
-	id("org.asciidoctor.jvm.convert") version "3.3.2"
-	id("org.springframework.cloud.contract") version "3.1.3"
+	id("org.springframework.boot") version "3.5.16"
+	id("io.spring.dependency-management") version "1.1.7"
+	id("org.asciidoctor.jvm.convert") version "4.0.5"
+	id("org.springframework.cloud.contract") version "4.3.4"
 	eclipse
 	`maven-publish`
 	idea
-	kotlin("jvm") version "1.6.21"
-	kotlin("plugin.spring") version "1.6.21"
-	kotlin("plugin.jpa") version "1.6.21"
+	kotlin("jvm") version "2.4.10"
+	kotlin("plugin.spring") version "2.4.10"
+	kotlin("plugin.jpa") version "2.4.10"
 }
 
 group = "com.sk"
@@ -34,7 +32,6 @@ configurations {
 repositories {
 	mavenLocal()
 	mavenCentral()
-	jcenter()
 }
 
 dependencies {
@@ -52,8 +49,8 @@ dependencies {
 	//implementation("org.springframework.security:spring-security-core")
 	//implementation("org.springframework.security:spring-security-config")
 	//implementation("org.springframework.boot:spring-boot-starter-security")
-	implementation("org.springframework.restdocs:spring-restdocs-webtestclient:2.0.6.RELEASE")
-	implementation("org.springdoc:springdoc-openapi-webflux-ui:1.6.9")
+	implementation("org.springframework.restdocs:spring-restdocs-webtestclient")
+	implementation("org.springdoc:springdoc-openapi-starter-webflux-ui:2.9.0")
 	compileOnly("org.projectlombok:lombok")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	runtimeOnly("com.h2database:h2")
@@ -62,14 +59,14 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("io.projectreactor:reactor-test")
 	testImplementation(kotlin("test"))
-	testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
-	testImplementation("org.junit.jupiter:junit-jupiter-params:5.8.2")
-	testImplementation("org.amshove.kluent:kluent:1.68")
-	testImplementation("io.mockk:mockk:1.12.4")
-	testImplementation("io.rest-assured:spring-web-test-client:5.1.0")
+	testImplementation("org.junit.jupiter:junit-jupiter")
+	testImplementation("org.junit.jupiter:junit-jupiter-params")
+	testImplementation("org.amshove.kluent:kluent:1.73")
+	testImplementation("io.mockk:mockk:1.14.11")
+	testImplementation("io.rest-assured:spring-web-test-client:6.0.1")
 	//testImplementation("io.rest-assured:spring-mock-mvc:5.1.0")
-	testImplementation("org.springframework.cloud:spring-cloud-contract-wiremock:3.1.3")
-	testImplementation("org.springframework.cloud:spring-cloud-contract-verifier:3.1.3")
+	testImplementation("org.springframework.cloud:spring-cloud-contract-wiremock:4.3.4")
+	testImplementation("org.springframework.cloud:spring-cloud-contract-verifier:4.3.4")
 	//implementation("org.springframework.restdocs:spring-restdocs")
 	//implementation("org.springframework.restdocs:spring-restdocs-core")
 	//testImplementation("de.flapdoodle.embed:de.flapdoodle.embed.mongo") //Enable it for embeded mongo db
@@ -77,9 +74,9 @@ dependencies {
 }
 
 tasks.withType<KotlinCompile> {
-	kotlinOptions {
-		freeCompilerArgs = listOf("-Xjsr305=strict")
-		jvmTarget = "11"
+	compilerOptions {
+		freeCompilerArgs.set(listOf("-Xjsr305=strict"))
+		jvmTarget.set(JvmTarget.JVM_25)
 	}
 }
 
@@ -96,8 +93,8 @@ tasks.withType<Test> {
  * then run: gradle asciidoctor
  */
 tasks.withType<AsciidoctorTask> {
-	setSourceDir(file("src/main/asciidoc"))
-	attributes(HashMap(Map.of("snippets", "build/generated-snippets")))
+	sourceDir(file("src/main/asciidoc"))
+	attributes(mapOf("snippets" to "build/generated-snippets"))
 }
 
 contracts {

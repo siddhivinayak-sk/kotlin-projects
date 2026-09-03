@@ -1,10 +1,11 @@
-//import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    id("org.springframework.boot") version "3.4.0"
-    id("io.spring.dependency-management") version "1.1.6"
-    kotlin("jvm") version "1.9.25"
-    kotlin("plugin.spring") version "1.9.25"
+    id("org.springframework.boot") version "3.5.16"
+    id("io.spring.dependency-management") version "1.1.7"
+    kotlin("jvm") version "2.4.10"
+    kotlin("plugin.spring") version "2.4.10"
 }
 
 group = "com.sk"
@@ -20,7 +21,7 @@ repositories {
 	mavenCentral()
 }
 
-extra["springCloudVersion"] = "2024.0.0"
+extra["springCloudVersion"] = "2025.0.3"
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
@@ -44,17 +45,17 @@ dependencyManagement {
     }
 }
 
-//tasks.withType<KotlinCompile> {
-//	kotlinOptions {
-//		freeCompilerArgs = listOf("-Xjsr305=strict")
-//		jvmTarget = "1.8"
-//	}
-//}
-//
-//tasks.withType<Test> {
-//	useJUnitPlatform()
-//}
-//
+tasks.withType<KotlinCompile> {
+	compilerOptions {
+		freeCompilerArgs.add("-Xjsr305=strict")
+		jvmTarget.set(JvmTarget.JVM_25)
+	}
+}
+
+tasks.withType<Test> {
+	useJUnitPlatform()
+}
+
 //tasks.register<DocumentTask>("create-readme") {
 //    val documents = listOf<String>("introduction", "details")
 //    sourceDocuments.set(documents)
