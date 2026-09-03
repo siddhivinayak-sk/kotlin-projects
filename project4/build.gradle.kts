@@ -17,7 +17,11 @@ plugins {
 
 group = "com.sk"
 version = "0.0.1-SNAPSHOT"
-java.sourceCompatibility = JavaVersion.VERSION_11
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(25)
+	}
+}
 
 configurations {
 	compileOnly {
@@ -170,5 +174,4 @@ jacoco {
  * 4. Add stub in test runner by using annotation on Test class: @org.springframework.cloud.contract.stubrunner.spring.AutoConfigureStubRunner(ids = ["com.sk:project6:0.0.1-SNAPSHOT:stubs"], stubsMode = org.springframework.cloud.contract.stubrunner.spring.StubRunnerProperties.StubsMode.CLASSPATH)
  * 5. Run the test
  */
-
 

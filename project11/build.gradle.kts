@@ -12,7 +12,9 @@ version = "0.0.1-SNAPSHOT"
 val springAiVersion = "0.8.0-SNAPSHOT"
 
 java {
-	sourceCompatibility = JavaVersion.VERSION_17
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(25)
+	}
 }
 
 repositories {

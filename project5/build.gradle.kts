@@ -41,6 +41,7 @@ val jakartavalidationapiVersion: String by project
 val awssdkbomVersion: String by project
 val apacheLog4jCoreVersion: String by project
 val javaxServletApiVersion: String by project
+val springSeplVersion: String by project
 
 repositories {
     mavenCentral()
@@ -103,6 +104,7 @@ dependencies {
     implementation("org.apache.logging.log4j:log4j-core:${apacheLog4jCoreVersion}")
     implementation("org.apache.logging.log4j:log4j-api:${apacheLog4jCoreVersion}")
     implementation("javax.servlet:servlet-api:${javaxServletApiVersion}")
+    implementation("org.springframework:spring-expression:$springSeplVersion")
 
     testImplementation("io.projectreactor:reactor-test:3.4.19")
     testImplementation(kotlin("test"))
