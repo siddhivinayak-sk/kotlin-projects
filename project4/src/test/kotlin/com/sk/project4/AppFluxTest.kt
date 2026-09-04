@@ -2,6 +2,7 @@ package com.sk.project4
 
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration
+import org.springframework.boot.autoconfigure.http.client.reactive.ClientHttpConnectorAutoConfiguration
 import org.springframework.boot.test.autoconfigure.OverrideAutoConfiguration
 import org.springframework.boot.test.autoconfigure.core.AutoConfigureCache
 import org.springframework.boot.test.autoconfigure.data.mongo.AutoConfigureDataMongo
@@ -33,6 +34,11 @@ import java.lang.annotation.Target
 @AutoConfigureDataMongo
 @TestPropertySource(properties = ["spring.mongodb.embedded.version=3.5.5"])
 @ExtendWith(value = [RestDocumentationExtension::class, SpringExtension::class])
+// Spring Boot 3.5's @AutoConfigureWebClient imports WebClientAutoConfiguration, whose "webClientSsl"
+// bean requires a ClientHttpConnectorBuilder<?> bean. That builder bean is normally supplied by
+// ClientHttpConnectorAutoConfiguration, but this test-slice's .imports metadata does not pull it in,
+// so it must be imported explicitly to avoid a NoSuchBeanDefinitionException.
+@ImportAutoConfiguration(ClientHttpConnectorAutoConfiguration::class)
 
 //@ExtendWith(SpringExtension::class)
 //@DataMongoTest

@@ -1,11 +1,11 @@
 package com.sk.project11.controllers
 
-import org.springframework.ai.chat.ChatResponse
 import org.springframework.ai.chat.messages.UserMessage
+import org.springframework.ai.chat.model.ChatModel
+import org.springframework.ai.chat.model.ChatResponse
 import org.springframework.ai.chat.prompt.Prompt
-import org.springframework.ai.embedding.EmbeddingClient
+import org.springframework.ai.embedding.EmbeddingModel
 import org.springframework.ai.embedding.EmbeddingResponse
-import org.springframework.ai.ollama.OllamaChatClient
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
@@ -14,8 +14,8 @@ import java.util.List
 
 @RestController
 class ChatController(
-    val ollamaChatClient: OllamaChatClient,
-    val embeddingClient: EmbeddingClient,
+    val ollamaChatClient: ChatModel,
+    val embeddingClient: EmbeddingModel,
 ) {
 
     @GetMapping("/ai/generate")
@@ -23,9 +23,9 @@ class ChatController(
         val prompt = Prompt(UserMessage(message))
         val chatResponse = ollamaChatClient.call(prompt)
         return mapOf(
-            "content" to chatResponse.result.output.content,
+            "content" to chatResponse.result.output.text,
             "messageType" to chatResponse.result.output.messageType,
-            "properties" to chatResponse.result.output.properties,
+            "properties" to chatResponse.result.output.metadata,
         )
     }
 

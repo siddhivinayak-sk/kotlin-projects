@@ -139,7 +139,7 @@ openApi {
 }
 
 jacoco {
-	toolVersion = "0.8.7"
+	toolVersion = "0.8.15"
 	reportsDirectory.set(layout.buildDirectory.dir("$buildDir/reports/jacoco"))
 }
 

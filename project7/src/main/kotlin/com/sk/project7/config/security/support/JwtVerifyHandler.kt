@@ -10,7 +10,7 @@ import java.util.Date
 class JwtVerifyHandler(val secret: String) {
 
     fun check(token: String): Mono<VerificationResult> {
-        return Mono.just<VerificationResult?>(verify(token))
+        return Mono.just(verify(token))
                 .onErrorResume { e -> Mono.error { AuthenticationException(e.message ?: "") } }
     }
 
